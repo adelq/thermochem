@@ -59,24 +59,5 @@ class MoistAir(object):
     def __repr__(self):
         return "<Moist Gas>:\n  Gas:\n"+self.gas.__repr__()
 
-
     def __unicode__(self):
         return u"<Moist Gas>:\n  Gas:\n"+self.gas.__unicode__()
-
-
-def test_wark():
-    """
-    This function runs the 10.7 example from Wark and Richard's
-    Thermodynamics, spanish translation.
-    """
-    from burcat import Elementdb
-    from units import Pressure,Temperature
-    db = Elementdb()
-    gas = db.getmixturedata([("AIR",1),("H2O",0.015)])
-    ma = MoistAir(gas)
-    assert ma.w == 0.0093294500500255822
-    assert ma.phi(Pressure(14.7).unit('psi'),
-                  Temperature(70).unit('F')) == 0.59790008408358786
-    assert ma.wet_bulb_T(Pressure(14.7).unit('psi')) == 286.14757997335232
-    
-

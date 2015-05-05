@@ -352,12 +352,3 @@ class Water(object):
         n2=raw_data2[:,3]
         
         return (sum(n*p**I*(eta+1)**J),sum(n2*p**I2*(eta2-2.1)**J2))
-    
-
-def test():
-    import doctest
-    doctest.testmod()
-
-if __name__ == '__main__':
-    test()
-

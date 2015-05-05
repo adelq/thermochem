@@ -371,10 +371,3 @@ class Massflowrate(float):
     @property
     def Btu(self):
         return self.__factory(self.data*foot**2/lb)
-
-
-def test_doctest():
-    import doctest
-    doctest.testmod()
-
-
