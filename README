@@ -1,4 +1,3 @@
-==========
 Thermochem
 ==========
 
@@ -16,7 +15,7 @@ and Thermochemistry. The following tools are provided:
 * Moist gas model.
 
 Dependencies
-============
+------------
 
 This packages needs the following extra modules to run.
 
@@ -30,7 +29,7 @@ This packages needs the following extra modules to run.
 * setuptools >= 0.6
 
 Development
-===========
+-----------
 
 If you want to further develop thermochem you must install the py.test
 framework.
