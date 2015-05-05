@@ -3,8 +3,8 @@ LICENSE
 MANIFEST.in
 README
 TODO
-bdist_wininst.bat
 ez_setup.py
+setup.cfg
 setup.py
 thermopy/BURCAT_THR.xml
 thermopy/__init__.py

@@ -1,19 +1,17 @@
 Metadata-Version: 1.0
 Name: thermopy
-Version: 0.3
+Version: 0.3.1
 Summary: Some utilities for Thermodynamics and Thermochemistry
 Home-page: http://packages.python.org/thermopy
 Author: Guillem Borrell i Nogueras
 Author-email: guillem@torroja.dmt.upm.es
-License: UNKNOWN
+License: BSD
 Description: UNKNOWN
 Platform: UNKNOWN
 Classifier: Development Status :: 3 - Alpha
 Classifier: Environment :: Console
 Classifier: Intended Audience :: Science/Research
 Classifier: License :: OSI Approved :: BSD License
-Classifier: Natural Language :: English
-Classifier: Natural Language :: Spanish
 Classifier: Operating System :: OS Independent
 Classifier: Programming Language :: Python :: 2.5
 Classifier: Topic :: Scientific/Engineering :: Chemistry
