@@ -28,9 +28,9 @@ class Temperature(float):
     Unit conversion is as easy as it gets.
 
     >>> T.C
-    37.777777777777771
+    37.77777777777777
     >>> T.F
-    99.999999999999986
+    99.99999999999999
 
     You can compute with temperatures because inherits from the float
     built-in
@@ -38,13 +38,13 @@ class Temperature(float):
     >>> T1 = Temperature(200)
     >>> T2 = Temperature(0).unit('C')
     >>> T1+T2
-    473.14999999999998
+    473.15
 
     If you don't want to use the class' attribute you can use the
     function `getattr` to get a value using the unit code.
 
     >>> getattr(T,'C')
-    37.777777777777771
+    37.77777777777777
     """
     def __init__(self,data):
         float.__init__(self,float(data))
@@ -187,7 +187,7 @@ class Enthalpy(float):
     >>> h.kJkg
     1.0
     >>> h.kcalkg
-    0.23900573613766729
+    0.2390057361376673
     >>> h.Btulb
     0.42992261392949266
     """
@@ -244,11 +244,11 @@ class Length(float):
 
     >>> l = Length(1).unit('inch')
     >>> l.mm
-    25.399999999999999
+    25.4
     >>> l.ft
-    0.083333333333333343
+    0.08333333333333334
     >>> l
-    0.025399999999999999
+    0.0254
     """
     def __init__(self,data):
         float.__init__(self,float(data))

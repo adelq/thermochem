@@ -178,9 +178,9 @@ class Water(object):
 
         >>> w = Water()
         >>> w.Tsat(100000)
-        372.75591861133762
+        372.7559186113376
         >>> w.Tsat(1200000)
-        461.11464162130039
+        461.1146416213004
         >>> w.Tsat(100)
         Traceback (most recent call last):                                 
           File "/usr/lib/python2.5/doctest.py", line 1228, in __run        
