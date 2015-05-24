@@ -346,64 +346,68 @@ hartree-electron volt relationship                     27.211 3845           0.0
 hartree-atomic mass unit relationship                  2.921 262 323e-8      0.000 000 019e-8      u"""
 
 
-
-#parse into a dict
+# parse into a dict
 physical_constants = {}
 for line in txt.split('\n'):
-    name = line[:55].rstrip().replace('magn.','magnetic')
-    val = line[55:77].replace(' ','').replace('...','')
+    name = line[:55].rstrip().replace('magn.', 'magnetic')
+    val = line[55:77].replace(' ', '').replace('...', '')
     val = float(val)
-    uncert = line[77:99].replace(' ','')
+    uncert = line[77:99].replace(' ', '')
     uncert = float(uncert)
     units = line[99:].rstrip()
     physical_constants[name] = (val, units, uncert)
 
-def value(key) :
+
+def value(key):
     """value indexed by key"""
     return physical_constants[key][0]
 
-def unit(key) :
+
+def unit(key):
     """unit indexed by key"""
     return physical_constants[key][1]
 
-def precision(key) :
+
+def precision(key):
     """relative precision indexed by key"""
     return physical_constants[key][2] / physical_constants[key][0]
 
-def find(sub) :
+
+def find(sub):
     """list all keys containing the string sub"""
     l_sub = string.lower(sub)
     result = []
-    for key in physical_constants :
+    for key in physical_constants:
         l_key = string.lower(key)
         if l_sub in l_key:
             result.append(key)
     result.sort()
-    for key in result :
+    for key in result:
         print key
 
-#table is lacking some digits for exact values: calculate from definition
+# table is lacking some digits for exact values: calculate from definition
 
 c = value('speed of light in vacuum')
-mu0 = 4e-7*pi
-epsilon0 = 1/(mu0*c*c)
+mu0 = 4e-7 * pi
+epsilon0 = 1 / (mu0 * c * c)
 
 exact_values = {
-'magnetic constant': (mu0, 'N A^-2', 0.0),
-'electric constant': (epsilon0, 'F m^-1', 0.0),
-'characteristic impedance of vacuum': (sqrt(mu0/epsilon0), 'ohm', 0.0),
-'atomic unit of permittivity': (4*epsilon0*pi, 'F m^-1', 0.0), #is that the definition?
-'joule-kilogram relationship': (1/(c*c), 'kg', 0.0),
-'kilogram-joule relationship': (c*c, 'J', 0.0),
-'hertz-inverse meter relationship': (1/c, 'm^-1', 0.0)
+    'magnetic constant': (mu0, 'N A^-2', 0.0),
+    'electric constant': (epsilon0, 'F m^-1', 0.0),
+    'characteristic impedance of vacuum': (sqrt(mu0 / epsilon0), 'ohm', 0.0),
+    # is that the definition?
+    'atomic unit of permittivity': (4 * epsilon0 * pi, 'F m^-1', 0.0),
+    'joule-kilogram relationship': (1 / (c * c), 'kg', 0.0),
+    'kilogram-joule relationship': (c * c, 'J', 0.0),
+    'hertz-inverse meter relationship': (1 / c, 'm^-1', 0.0)
 }
 
-#sanity check
+# sanity check
 for key in exact_values:
-    assert (exact_values[key][0]-value(key)) / value(key) < 1e-9
+    assert (exact_values[key][0] - value(key)) / value(key) < 1e-9
 
 physical_constants.update(exact_values)
 
-#check update
+# check update
 for key in exact_values:
-    assert (exact_values[key][0]-value(key)) / value(key) == 0
+    assert (exact_values[key][0] - value(key)) / value(key) == 0
