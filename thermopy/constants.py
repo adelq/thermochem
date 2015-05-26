@@ -2,8 +2,8 @@
 Collection of physical constants and conversion factors.
 
 Most constants are in SI units, so you can do
-print '10 mile per minute is', 10*mile/minute, 'm/s or',
-    10*mile/(minute*knot), 'knots'
+print('10 mile per minute is', 10*mile/minute, 'm/s or',
+    10*mile/(minute*knot), 'knots')
 
 The list is not meant to be comprehensive, but just a convenient list for
 everyday use.

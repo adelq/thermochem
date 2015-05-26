@@ -185,6 +185,9 @@ class Mixture(object):
     def __iter__(self):
         return self
 
+    def __next__(self):
+        return self.next()
+
     def next(self):
         try:
             rv = self.mix[self.idx]
@@ -362,8 +365,8 @@ class Elementdb(object):
     air molar mass 0.02896518
     >>> print('heat capacity',air.cp)
     heat capacity 1004.77625096
-    >>> print(air.density(101325,298))
-    1.1845186553
+    >>> print(round(air.density(101325,298), 6))
+    1.184519
 
     The element database can create also mixtures.  It returns an
     instance of Mixture object that can give you the same as the
