@@ -50,7 +50,6 @@ class Temperature(float):
     """
 
     def __init__(self, data):
-        float.__init__(self, float(data))
         self.data = float(data)
 
     @classmethod
@@ -115,7 +114,6 @@ class Pressure(float):
     """
 
     def __init__(self, data):
-        float.__init__(self, float(data))
         self.data = float(data)
 
     @classmethod
@@ -196,7 +194,6 @@ class Enthalpy(float):
     """
 
     def __init__(self, data):
-        float.__init__(self, float(data))
         self.data = float(data)
 
     @classmethod
@@ -256,7 +253,6 @@ class Length(float):
     """
 
     def __init__(self, data):
-        float.__init__(self, float(data))
         self.data = float(data)
 
     @classmethod
@@ -309,7 +305,6 @@ class Massflow(float):
     """
 
     def __init__(self, data):
-        float.__init__(self, float(data))
         self.data = float(data)
 
     @classmethod
@@ -358,7 +353,6 @@ class Massflowrate(float):
     """
 
     def __init__(self, data):
-        float.__init__(self, float(data))
         self.data = float(data)
 
     @classmethod
