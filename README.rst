@@ -1,7 +1,7 @@
 Thermochem
 ==========
 
-.. |Build Status| image:: https://travis-ci.org/adelq/thermopy.svg?branch=master
+.. image:: https://travis-ci.org/adelq/thermopy.svg?branch=master
     :target: https://travis-ci.org/adelq/thermopy
 
 Thermochem is a package with some useful modules for Thermodynamics
