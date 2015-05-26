@@ -151,16 +151,17 @@ class Mixture(object):
     ("CO2",0.0319),\
     ("AR REF ELEMENT",0.9365),\
     ])
-    >>> for e in mix: print e
-    (<element> O2 REF ELEMENT, 20.947600000000001)
-    (<element> N2  REF ELEMENT, 78.084000000000003)
-    (<element> CO2, 0.031899999999999998)
+    >>> mix_list = [(e[0], round(e[1], 6)) for e in mix]
+    >>> for e in mix_list: print e
+    (<element> O2 REF ELEMENT, 20.9476)
+    (<element> N2  REF ELEMENT, 78.084)
+    (<element> CO2, 0.0319)
     (<element> AR REF ELEMENT, 0.9365)
 
     You can get elements either by index or by value.
 
     >>> print mix['CO2']
-    (<element> CO2, 0.031899999999999998)
+    (<element> CO2, 0.0319)
 
     You can also delete components of a mixture.  Needed by the
     MoistAir class

@@ -105,10 +105,12 @@ class SimpleCombustor(object):
         >>> db = Elementdb()
         >>> methane = db.getelementdata("CH4   RRHO")
         >>> combustor = SimpleCombustor(methane,1,db)
-        >>> print combustor.products.cp
-        >>> print combustor.heat_of_comb(298.15)
-        50027136.3415
-        >>> print combustor.adiabatic_flame_temp(298.15)
+        >>> print round(combustor.products.cp, 6)
+        1112.222587
+        >>> print round(combustor.heat_of_comb(298.15), 2)
+        50027136.34
+        >>> print round(combustor.adiabatic_flame_temp(298.15)[0], 6)
+        2128.632842
         """
 
         # REACTANTS
