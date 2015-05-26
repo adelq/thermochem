@@ -20,6 +20,7 @@
     find(sub) prints out a list of keys containing the string sub.
 """
 
+from __future__ import print_function
 import string
 from math import pi, sqrt
 __all__ = ['physical_constants', 'value', 'unit', 'precision', 'find']
@@ -383,7 +384,7 @@ def find(sub):
             result.append(key)
     result.sort()
     for key in result:
-        print key
+        print(key)
 
 # table is lacking some digits for exact values: calculate from definition
 

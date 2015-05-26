@@ -13,6 +13,7 @@
 # TODO: Introduce the exception in all try-except clauses
 
 from __future__ import division
+from __future__ import print_function
 try:
     from xml.etree.ElementTree import parse
 except ImportError:
@@ -40,7 +41,7 @@ class Element(object):
 
     >>> db = Elementdb()
     >>> weird = db.getelementdata("C8H6O2")
-    >>> print weird.elements
+    >>> print(weird.elements)
     [('C', 8), ('H', 6), ('O', 2)]
     """
 
@@ -152,7 +153,7 @@ class Mixture(object):
     ("AR REF ELEMENT",0.9365),\
     ])
     >>> mix_list = [(e[0], round(e[1], 6)) for e in mix]
-    >>> for e in mix_list: print e
+    >>> for e in mix_list: print(e)
     (<element> O2 REF ELEMENT, 20.9476)
     (<element> N2  REF ELEMENT, 78.084)
     (<element> CO2, 0.0319)
@@ -160,14 +161,14 @@ class Mixture(object):
 
     You can get elements either by index or by value.
 
-    >>> print mix['CO2']
+    >>> print(mix['CO2'])
     (<element> CO2, 0.0319)
 
     You can also delete components of a mixture.  Needed by the
     MoistAir class
 
     >>> mix.delete('CO2')
-    >>> print mix
+    >>> print(mix)
     <Mixture>:
         O2 REF ELEMENT at 20.9476
         N2  REF ELEMENT at 78.084
@@ -335,20 +336,20 @@ class Elementdb(object):
 
     >>> db = Elementdb()
     >>> oxygen = db.getelementdata("O2 REF ELEMENT")
-    >>> print oxygen
+    >>> print(oxygen)
     <element> O2 REF ELEMENT
-    >>> print 'molar mass',oxygen.mm
+    >>> print('molar mass',oxygen.mm)
     molar mass 0.0319988
-    >>> print 'heat capacity',oxygen.cp
+    >>> print('heat capacity',oxygen.cp)
     heat capacity 918.078952423
 
     The reference temperature for enthalpy is 298.15 K
 
-    >>> print 'enthalpy',oxygen.ho(298.15)
+    >>> print('enthalpy',oxygen.ho(298.15))
     enthalpy 1.94293914332e-05
-    >>> print 'enthropy',oxygen.so(298)
+    >>> print('enthropy',oxygen.so(298))
     enthropy 205.133745795
-    >>> print 'gibbs free energy',oxygen.go(298)
+    >>> print('gibbs free energy',oxygen.go(298))
     gibbs free energy -61134.2629008
 
     There's a search function.  It is very useful because some names
@@ -357,11 +358,11 @@ class Elementdb(object):
     >>> db.search("AIR")
     ['AIR']
     >>> air = db.getelementdata("AIR")
-    >>> print 'air molar mass',air.mm
+    >>> print('air molar mass',air.mm)
     air molar mass 0.02896518
-    >>> print 'heat capacity',air.cp
+    >>> print('heat capacity',air.cp)
     heat capacity 1004.77625096
-    >>> print air.density(101325,298)
+    >>> print(air.density(101325,298))
     1.1845186553
 
     The element database can create also mixtures.  It returns an
@@ -373,15 +374,15 @@ class Elementdb(object):
     ("CO2",0.0319),\
     ("AR REF ELEMENT",0.9365),\
     ])
-    >>> print mix
+    >>> print(mix)
     <Mixture>:
         O2 REF ELEMENT at 20.9476
         N2  REF ELEMENT at 78.084
         CO2 at 0.0319
         AR REF ELEMENT at 0.9365
-    >>> print mix.cp
+    >>> print(mix.cp)
     1004.72217065
-    >>> print mix.mm
+    >>> print(mix.mm)
     0.028965116031
     """
 
