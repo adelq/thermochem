@@ -1,5 +1,6 @@
 from __future__ import division
-from iapws import Water
+from __future__ import absolute_import
+from .iapws import Water
 
 # Water at triple point
 pt = 612

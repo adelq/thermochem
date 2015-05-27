@@ -1,5 +1,6 @@
 from __future__ import division
-from burcat import Mixture
+from __future__ import absolute_import
+from .burcat import Mixture
 from scipy import optimize
 from copy import deepcopy
 
@@ -101,7 +102,7 @@ class SimpleCombustor(object):
           Element database.  It is passed as argument because it has
           to be allocated only once.
 
-        >>> from burcat import Elementdb
+        >>> from .burcat import Elementdb
         >>> db = Elementdb()
         >>> methane = db.getelementdata("CH4   RRHO")
         >>> combustor = SimpleCombustor(methane,1,db)

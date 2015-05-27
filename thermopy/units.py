@@ -1,4 +1,5 @@
-from constants import *
+from __future__ import absolute_import
+from .constants import *
 
 
 class Temperature(float):

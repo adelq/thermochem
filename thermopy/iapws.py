@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-from units import Pressure, Temperature, Enthalpy
+from __future__ import absolute_import
+from .units import Pressure, Temperature, Enthalpy
 from numpy import array, sum, sqrt
 
 

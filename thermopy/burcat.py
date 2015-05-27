@@ -19,7 +19,6 @@ try:
 except ImportError:
     from elementtree import parse
 from numpy import empty, array, dot, log
-from pkg_resources import Requirement, resource_filename
 
 # Universal gas constant R
 R = 8.314472
@@ -385,8 +384,8 @@ class Elementdb(object):
         AR REF ELEMENT at 0.9365
     >>> print(mix.cp)
     1004.72217065
-    >>> print(mix.mm)
-    0.028965116031
+    >>> print(round(mix.mm, 6))
+    0.028965
     """
 
     def __init__(self):
@@ -396,18 +395,8 @@ class Elementdb(object):
         Create the instance and the elements at boot, otherwise be
         prepared to face huge computation times.
         """
-        try:
-            # try to open the local file, it does not raise an
-            # exception on a development environment
-            database = open("BURCAT_THR.xml", 'r')
-        except IOError:
-            # Fallback to pkg_resources when thermopy is an installed
-            # module
-            dbname = resource_filename(
-                Requirement.parse("thermopy"), 'thermopy/BURCAT_THR.xml')
-            database = open(dbname, 'r')
-
-        tree = parse(database)
+        with open("thermopy/BURCAT_THR.xml", 'r') as database:
+            tree = parse(database)
         self.db = tree.getroot()
 
     def search(self, formula):
