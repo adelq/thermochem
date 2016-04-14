@@ -407,8 +407,13 @@ class Elementdb(object):
         matches = []
         for specie in self.db:
             try:
-                if formula in specie.find("phase").find("formula").text:
-                    matches.append(specie.find("phase").find("formula").text)
+                for element in specie:
+                    try:
+                        if element.tag == "phase":
+                            if formula in element.find("formula").text:
+                                matches.append(element.find("formula").text)
+                    except:
+                        pass
             except:
                 pass
 
@@ -423,31 +428,34 @@ class Elementdb(object):
         comp = []
         for specie in self.db:
             try:
-                if formula == specie.find("phase").find("formula").\
-                        text:
-                    phase = specie.find("phase")
-                    coefficients = phase.find("coefficients")
-                    low = coefficients.find("range_Tmin_to_1000")
-                    for (i, c) in zip(range(7), low):
-                        Tmin_[i] = float(c.text)
+                for element in specie:
+                    try:
+                        if element.tag == "phase":
+                            if formula == element.find("formula").text:
+                                phase = element
+                                coefficients = phase.find("coefficients")
+                                low = coefficients.find("range_Tmin_to_1000")
+                                for (i, c) in zip(range(7), low):
+                                    Tmin_[i] = float(c.text)
 
-                    high = coefficients.find("range_1000_to_Tmax")
-                    for (i, c) in zip(range(7), high):
-                        _Tmax[i] = float(c.text)
+                                high = coefficients.find("range_1000_to_Tmax")
+                                for (i, c) in zip(range(7), high):
+                                    _Tmax[i] = float(c.text)
 
-                    elements = phase.find("elements")
-                    elements = elements.getchildren()
-                    for elem in elements:
-                        it = elem.items()
-                        # First is name of element, second is number
-                        # of atoms
-                        comp.append((it[0][1], int(it[1][1])))
+                                elements = phase.find("elements")
+                                elements = elements.getchildren()
+                                for elem in elements:
+                                    it = elem.items()
+                                    # First is name of element, second is number
+                                    # of atoms
+                                    comp.append((it[0][1], int(it[1][1])))
 
-                    mm = float(phase.find("molecular_weight").text) / 1000
-                    hfr = float(coefficients.find("hf298_div_r").text)
+                                mm = float(phase.find("molecular_weight").text) / 1000
+                                hfr = float(coefficients.find("hf298_div_r").text)
 
-                    return Element(formula, Tmin_, _Tmax, mm, hfr, comp)
-
+                                return Element(formula, Tmin_, _Tmax, mm, hfr, comp)
+                    except:
+                        pass
             except:
                 pass
 
@@ -471,4 +479,9 @@ if __name__ == '__main__':
                              ("CO2", 0.0319),
                              ("AR REF ELEMENT", 0.9365),
                              ("O2 REF ELEMENT", 1.2)])
-    mix.aggregate()
+    #mix.aggregate()
+
+    print(db.getelementdata('NiO  Solid-A'))
+    print(db.getelementdata('NiO  Solid-C'))
+    print(db.search('NiO'))
+
