@@ -91,7 +91,7 @@ class Element(object):
         Computes the sensible enthalpy in J/mol
         """
         Ta = array([1, T / 2, T ** 2 / 3, T ** 3 / 4, T ** 4 / 5, 1 / T], 'd')
-        if T > 200 and T < 1000:
+        if T > 200 and T <= 1000:
             return dot(self.Tmin_[:6], Ta) * R * T
         elif T > 1000 and T < 6000:
             return dot(self._Tmax[:6], Ta) * R * T
@@ -109,7 +109,7 @@ class Element(object):
         Computes enthropy in J/mol K
         """
         Ta = array([log(T), T, T ** 2 / 2, T ** 3 / 3, T ** 4 / 4, 0, 1], 'd')
-        if T > 200 and T < 1000:
+        if T > 200 and T <= 1000:
             return dot(self.Tmin_, Ta) * R
         elif T > 1000 and T < 6000:
             return dot(self._Tmax, Ta) * R
