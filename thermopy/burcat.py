@@ -472,16 +472,16 @@ class Elementdb(object):
 
 
 if __name__ == '__main__':
-    # Move all doctests to py.test
+    # TODO: Move all doctests to py.test
     db = Elementdb()
     mix = db.getmixturedata([("O2 REF ELEMENT", 20.9476),
                              ("N2  REF ELEMENT", 78.084),
                              ("CO2", 0.0319),
                              ("AR REF ELEMENT", 0.9365),
                              ("O2 REF ELEMENT", 1.2)])
-    #mix.aggregate()
+    mix.aggregate()
 
+    # Test NiO phases
     print(db.getelementdata('NiO  Solid-A'))
     print(db.getelementdata('NiO  Solid-C'))
     print(db.search('NiO'))
-
