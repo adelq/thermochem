@@ -1,5 +1,6 @@
 from thermopy.combustion import SimpleCombustor, Combustor
 from thermopy.burcat import Elementdb
+from nose.tools import assert_almost_equals
 
 
 def test_simplecombustor():
@@ -16,10 +17,10 @@ def test_simplecombustor():
 
 def test_combustor():
     db = Elementdb()
-    fuels = db.getmixturedata([("CH4   RRHO",0.9168),
-                               ("C2H6",0.0686),
-                               ("C3H8",0.0070),
-                               ("C4H10 n-butane",0.0011)])
+    fuels = db.getmixturedata([("CH4   RRHO", 0.9168),
+                               ("C2H6", 0.0686),
+                               ("C3H8", 0.0070),
+                               ("C4H10 n-butane", 0.0011)])
 
-    combustor = Combustor(fuels,1,db)
-    assert combustor.heat_of_comb(423.15) == 49245710.116662093
+    combustor = Combustor(fuels, 1, db)
+    assert_almost_equals(combustor.heat_of_comb(423.15), 49245710.116662093)

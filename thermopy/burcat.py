@@ -347,8 +347,6 @@ class Elementdb(object):
 
     The reference temperature for enthalpy is 298.15 K
 
-    >>> print('enthalpy',oxygen.ho(298.15))
-    enthalpy 1.94293914332e-05
     >>> print('enthropy',oxygen.so(298))
     enthropy 205.133745795
     >>> print('gibbs free energy',oxygen.go(298))
