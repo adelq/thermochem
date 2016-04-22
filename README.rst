@@ -22,8 +22,7 @@ Dependencies
 
 This packages needs the following extra modules to run.
 
--  Python 2.5. Python 2.6 is not supported yet by the rest of
-   dependencies
+-  Python 2.7. Python 2.6, 3.4, and 3.5 supported but not fully tested.
 
 -  Numpy >= 1.1.0
 
