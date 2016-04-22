@@ -6,7 +6,6 @@ from numpy import array, sum, sqrt
 
 
 class Water(object):
-
     """Taken from
 
     The International Association for the Properties of Water and
