@@ -10,6 +10,7 @@ run.
 
 from __future__ import division
 from __future__ import print_function
+import os
 try:
     from xml.etree.ElementTree import parse
 except ImportError:
@@ -389,7 +390,9 @@ class Elementdb(object):
         Create the instance and the elements at boot, otherwise be
         prepared to face huge computation times.
         """
-        with open("thermochem/BURCAT_THR.xml", 'r') as database:
+        dirname = os.path.dirname(__file__)
+        burcat = os.path.join(dirname, 'BURCAT_THR.xml')
+        with open(burcat, 'r') as database:
             tree = parse(database)
         self.db = tree.getroot()
 
