@@ -6,7 +6,7 @@ from thermopy.units import Pressure, Temperature
 def test_wark():
     """
     This function runs the 10.7 example from Wark and Richard's
-    Thermodynamics, spanish translation.
+    Thermodynamics, Spanish translation.
     """
     db = Elementdb()
     gas = db.getmixturedata([("AIR", 1), ("H2O", 0.015)])

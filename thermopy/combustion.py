@@ -71,11 +71,10 @@ def balance_mix(fuels, phi):
         products['H2O'] += dprod['H2O']
         products['O2'] += dprod['O2']
 
-    return(reactants, products)
+    return (reactants, products)
 
 
 class SimpleCombustor(object):
-
     """
     This class models a simple combustor that uses fuel as a reductor
     and air as a single oxidizer. The combustion is complete, no CO
@@ -171,7 +170,6 @@ class SimpleCombustor(object):
 
 
 class Combustor(object):
-
     """
     Combustor that is able to characterize the combustion of a mixture
     of fuels

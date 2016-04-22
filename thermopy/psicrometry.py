@@ -8,7 +8,6 @@ Tt = 273.16
 
 
 class MoistAir(object):
-
     """
     Class that models a moist gas.  The computations in this class are
     a bit tricky because the enthalpy computations for steam far from
@@ -48,7 +47,8 @@ class MoistAir(object):
         Relative moisture given pressure and temperature.
         """
         ya = self.qgas / (self.qgas + self.qwater)
-        return self.gas.mm * ya * p * self.w / (self.water.mm * self.moist.psat(T))
+        return self.gas.mm * ya * p * self.w / (self.water.mm *
+                                                self.moist.psat(T))
 
     def wet_bulb_T(self, p):
         """

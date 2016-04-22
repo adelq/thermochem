@@ -3,7 +3,6 @@ from .constants import *
 
 
 class Temperature(float):
-
     """
     Class that models a temperature measure with conversion utilities
 
@@ -81,7 +80,6 @@ class Temperature(float):
 
 
 class Pressure(float):
-
     """
     Class that models a Pressure measure with conversion utilities
 
@@ -167,11 +165,11 @@ class Pressure(float):
     def torr(self):
         return self.__factory(self.data / torr)
 
+
 HUNITS = ['si', 'kJkg', 'kcalkg', 'Btulb']
 
 
 class Enthalpy(float):
-
     """
     Class that models an enthalpy measure with conversion utilities
 
@@ -230,7 +228,6 @@ class Enthalpy(float):
 
 
 class Length(float):
-
     """
     Class that models a length measure with conversion utilities
 
@@ -290,7 +287,6 @@ class Length(float):
 
 
 class Massflow(float):
-
     """
     Class that models a mass flow measure with conversion utilities
 
@@ -342,7 +338,6 @@ class Massflow(float):
 
 
 class Massflowrate(float):
-
     """
     Class that models a mass flow measure with conversion utilities
 
