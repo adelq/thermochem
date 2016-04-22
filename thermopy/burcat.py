@@ -1,14 +1,10 @@
-# burcat.py
-
-# This module extracts the information provided in "Third millenium
-# Ideal Gas and Condensed Phase Thermochemical Database for Combustion
-# with Updates from Active Thermochemical Tables. A. Burcat and B
-# Ruscic. It needs the actual database BURCAT_THR.xml (xml format) to
-# run.
-
-# Guillem Borrell i Nogueras
-#
-# Funding by Vulcano Sadeca
+"""
+This module extracts the information provided in "Third millenium
+Ideal Gas and Condensed Phase Thermochemical Database for Combustion
+with Updates from Active Thermochemical Tables. A. Burcat and B
+Ruscic. It needs the actual database BURCAT_THR.xml (xml format) to
+run.
+"""
 
 # TODO: Introduce the exception in all try-except clauses
 
@@ -180,7 +176,7 @@ class Mixture(object):
         self.idx = 0
 
     # The following two functions are an iterator. Its purpose is to
-    # be able to iterate throug all the elements of a mix.
+    # be able to iterate through all the elements of a mix.
     def __iter__(self):
         return self
 
