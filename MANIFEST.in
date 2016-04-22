@@ -5,4 +5,4 @@ include TODO
 
 include ez_setup.py
 
-recursive-include thermopy *.xml
+recursive-include thermochem *.xml
