@@ -1,4 +1,4 @@
-from thermopy.units import Pressure, Temperature
+from thermochem.units import Pressure, Temperature
 from nose.tools import assert_equals
 
 

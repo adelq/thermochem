@@ -1,6 +1,6 @@
-from thermopy.psicrometry import MoistAir
-from thermopy.burcat import Elementdb
-from thermopy.units import Pressure, Temperature
+from thermochem.psicrometry import MoistAir
+from thermochem.burcat import Elementdb
+from thermochem.units import Pressure, Temperature
 
 
 def test_wark():

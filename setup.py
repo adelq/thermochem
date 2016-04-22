@@ -1,12 +1,12 @@
 from setuptools import setup, find_packages
-import thermopy
+import thermochem
 
-setup(name="thermopy",
-      version=thermopy.__version__,
+setup(name="thermochem",
+      version=thermochem.__version__,
       description="Some utilities for Thermodynamics and Thermochemistry",
       author="Adel Qalieh",
       author_email="adelq@sas.upenn.edu",
-      url="https://github.com/adelq/thermopy",
+      url="https://github.com/adelq/thermochem",
       license="BSD",
       packages=find_packages(),
       include_package_data=True,

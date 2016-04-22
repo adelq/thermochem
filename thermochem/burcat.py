@@ -389,7 +389,7 @@ class Elementdb(object):
         Create the instance and the elements at boot, otherwise be
         prepared to face huge computation times.
         """
-        with open("thermopy/BURCAT_THR.xml", 'r') as database:
+        with open("thermochem/BURCAT_THR.xml", 'r') as database:
             tree = parse(database)
         self.db = tree.getroot()
 

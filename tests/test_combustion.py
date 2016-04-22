@@ -1,5 +1,5 @@
-from thermopy.combustion import SimpleCombustor, Combustor
-from thermopy.burcat import Elementdb
+from thermochem.combustion import SimpleCombustor, Combustor
+from thermochem.burcat import Elementdb
 from nose.tools import assert_almost_equals
 
 

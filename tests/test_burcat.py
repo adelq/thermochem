@@ -1,4 +1,4 @@
-from thermopy.burcat import Elementdb
+from thermochem.burcat import Elementdb
 from nose.tools import eq_, assert_almost_equals
 
 

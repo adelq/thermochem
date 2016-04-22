@@ -1,4 +1,4 @@
-from thermopy.iapws import Water
+from thermochem.iapws import Water
 from nose.tools import assert_almost_equal
 
 
