@@ -176,8 +176,7 @@ class Janafdb(object):
         >>> db.getphasedata(formula='Oxyz')
         Traceback (most recent call last):
             ...
-        ValueError: Valid phase types are ['cr', 'l', 'cr,l', 'g', 'ref', 'cd',
-        'fl', 'am', 'vit', 'mon', 'pol', 'sln', 'aq', 'sat'].
+        ValueError: Valid phase types are ['cr', 'l', 'cr,l', 'g', 'ref', 'cd', 'fl', 'am', 'vit', 'mon', 'pol', 'sln', 'aq', 'sat'].
         >>> db.getphasedata(formula='Oxyz', phase='l')
         Traceback (most recent call last):
             ...
@@ -243,12 +242,3 @@ class Janafdb(object):
     #         mixture.add(self.getelementdata(comp[0]), comp[1])
     #
     #     return mixture
-
-
-if __name__ == '__main__':
-    db = Janafdb()
-
-    s = db.search('Ti')
-    print(len(s))
-
-    print(db.getphasedata(formula='O2Ti', name='Rutile', phase='cr'))
