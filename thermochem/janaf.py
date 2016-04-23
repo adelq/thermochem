@@ -126,7 +126,9 @@ class Janafdb(object):
 
         # Read the index file which tells us the filenames for all the phases
         # in the JANAF database.
-        self.db = pd.read_csv("thermochem/JANAF_index.txt", delimiter='|')
+        dirname = os.path.dirname(__file__)
+        janaf_index = os.path.join(dirname, 'JANAF_index.txt')
+        self.db = pd.read_csv(janaf_index, delimiter='|')
         # Name the columns and trim whitespace off the text fields.
         self.db.columns = ['formula', 'name', 'phase', 'filename']
         self.db["formula"] = self.db["formula"].map(str.strip)
@@ -135,7 +137,7 @@ class Janafdb(object):
         self.db["filename"] = self.db["filename"].map(str.strip)
 
         # Make sure that the directory for cached JANAF files exists.
-        self.JANAF_cachedir = os.path.join('.', 'thermochem', 'JANAF_Cache')
+        self.JANAF_cachedir = os.path.join(dirname, 'JANAF_Cache')
         if not os.path.exists(self.JANAF_cachedir):
             os.mkdir(self.JANAF_cachedir)
 
