@@ -51,9 +51,9 @@ class JanafPhase(object):
     >>> print(p.hef([500, 550, 1800]))
     [  12.562    15.9955  110.022 ]
     >>> print(p.DeltaH([500, 550, 1800]))
-    [-943.67   -943.2295 -936.679 ]
+    [-943670.  -943229.5 -936679. ]
     >>> print(p.DeltaG([500, 550, 1800]))
-    [-852.157  -843.0465 -621.013 ]
+    [-852157.  -843046.5 -621013. ]
     >>> print(p.logKf([500, 550, 1800]))
     [ 89.024   80.8125  18.021 ]
     >>> print(p.cp(50000))
@@ -81,6 +81,10 @@ class JanafPhase(object):
             # Anything else becomes a nan.
             # Convert to floats.
             data[c] = pd.to_numeric(data[c], errors='coerce')
+
+        # Convert all units to Joules.
+        data['Delta_fH'] *= 1000
+        data['Delta_fG'] *= 1000
 
         # Now make interpolatable functions for each of these.
         self.cp = interp1d(self.rawdata['T'], self.rawdata['Cp'])
