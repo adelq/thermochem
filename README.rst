@@ -12,6 +12,9 @@ and Thermochemistry. The following tools are provided:
  
 -  Alexander Burcat's database and routines to compute the properties
    of more than 1300 substances from 200K to 6000K.
+
+-  JANAF thermodynamic data pulled from NIST website to compute
+   properties of more than 1200 substances from 0K to 2500K.
  
 -  Simple reactor for modeling combustion of single organic compounds.
  
@@ -27,6 +30,8 @@ This packages needs the following extra modules to run.
 -  Numpy >= 1.1.0
 
 -  Scipy >= 0.6.0
+
+-  Pandas >= 0.18.0
 
 -  setuptools >= 0.6
 

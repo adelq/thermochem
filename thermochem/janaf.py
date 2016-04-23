@@ -12,7 +12,9 @@ from __future__ import print_function
 
 import numpy as np
 import pandas as pd
+from scipy.interpolate import interp1d
 import os
+
 try:
     # Python 3
     import urllib.request as urllib2
@@ -31,61 +33,72 @@ except ImportError:
 # Universal gas constant R
 R = 8.314472
 
+class JanafPhase(object):
+    """
+    Class which is created by Janafdb for a specific phase.
+
+    It reads in the JANAF data file and produces functions which interpolate the thermodynamic
+    constants.
+
+    >>> db = Janafdb()
+    >>> p = db.getphasedata(formula='O2Ti', name='Rutile', phase='cr')
+    >>> print(p.cp([500, 550, 1800]))
+    [ 67.203  68.567  78.283]
+    >>> print(p.S([500, 550, 1800]))
+    [  82.201    88.4565  176.876 ]
+    >>> print(p.gef([500, 550, 1800]))
+    [  57.077   59.704  115.753]
+    >>> print(p.hef([500, 550, 1800]))
+    [  12.562    15.9955  110.022 ]
+    >>> print(p.DeltaH([500, 550, 1800]))
+    [-943.67   -943.2295 -936.679 ]
+    >>> print(p.DeltaG([500, 550, 1800]))
+    [-852.157  -843.0465 -621.013 ]
+    >>> print(p.logKf([500, 550, 1800]))
+    [ 89.024   80.8125  18.021 ]
+    >>> print(p.cp(50000))
+    Traceback (most recent call last):
+        ...
+    ValueError: A value in x_new is above the interpolation range.
+    """
+    def __init__(self, rawdata_text):
+        # Store the raw data text file from NIST.
+        self.rawdata_text = rawdata_text
+
+        # Read the text file into a DataFrame.
+        data = pd.read_csv(StringIO(self.rawdata_text), skiprows=2, header=None, delimiter='[\t\s]*', engine='python')
+        data.columns = ['T', 'Cp', 'S', '[G-H(Tr)]/T', 'H-H(Tr)', 'Delta_fH', 'Delta_fG', 'log(Kf)']
+        self.rawdata = data
+
+        # Sometimes the JANAF files have funky stuff written in them.  (Old school text format...)
+        # Clean it up.
+        for c in data.columns:
+            # We only need to polish up columns that aren't floating point numbers.
+            if np.issubdtype(data.dtypes[c], np.floating):
+                continue
+            # Change INFINITE to inf
+            data.loc[data[c] == 'INFINITE', c]
+            # Anything else becomes a nan.
+            # Convert to floats.
+            data[c] = pd.to_numeric(data[c], errors='coerce')
+
+        # Now make interpolatable functions for each of these.
+        self.cp = interp1d(self.rawdata['T'], self.rawdata['Cp'])
+        self.S = interp1d(self.rawdata['T'], self.rawdata['S'])
+        self.gef = interp1d(self.rawdata['T'], self.rawdata['[G-H(Tr)]/T'])
+        self.hef = interp1d(self.rawdata['T'], self.rawdata['H-H(Tr)'])
+        self.DeltaH = interp1d(self.rawdata['T'], self.rawdata['Delta_fH'])
+        self.DeltaG = interp1d(self.rawdata['T'], self.rawdata['Delta_fG'])
+        self.logKf = interp1d(self.rawdata['T'], self.rawdata['log(Kf)'])
+
+        # TODO Deal well with crystal<->liquid transitions which have a below and above value for Cp, S, etc.
+
 class Janafdb(object):
 
     """
     Class that reads the NIST JANAF tables for thermodynamic data.
 
     Data is initially read from the web servers, and then cached.
-
-    # >>> db = Elementdb()
-    # >>> TiO = db.getelementdata("TiO", 'c,l')
-    # >>> print(TiO)
-    # <element> O2 REF ELEMENT
-    # >>> print('molar mass',oxygen.mm)
-    # molar mass 0.0319988
-    # >>> print('heat capacity',oxygen.cp)
-    # heat capacity 918.078952423
-    #
-    # The reference temperature for enthalpy is 298.15 K
-    #
-    # >>> print('enthropy',oxygen.so(298))
-    # enthropy 205.133745795
-    # >>> print('gibbs free energy',oxygen.go(298))
-    # gibbs free energy -61134.2629008
-    #
-    # There's a search function.  It is very useful because some names
-    # are a bit tricky.  Well, not this one.
-    #
-    # >>> db.search("AIR")
-    # ['AIR']
-    # >>> air = db.getelementdata("AIR")
-    # >>> print('air molar mass',air.mm)
-    # air molar mass 0.02896518
-    # >>> print('heat capacity',air.cp)
-    # heat capacity 1004.77625096
-    # >>> print(round(air.density(101325,298), 6))
-    # 1.184519
-    #
-    # The element database can create also mixtures.  It returns an
-    # instance of Mixture object that can give you the same as the
-    # Element class for any mixture.
-    #
-    # >>> mix = db.getmixturedata([("O2 REF ELEMENT",20.9476),\
-    # ("N2  REF ELEMENT",78.084),\
-    # ("CO2",0.0319),\
-    # ("AR REF ELEMENT",0.9365),\
-    # ])
-    # >>> print(mix)
-    # <Mixture>:
-    #     O2 REF ELEMENT at 20.9476
-    #     N2  REF ELEMENT at 78.084
-    #     CO2 at 0.0319
-    #     AR REF ELEMENT at 0.9365
-    # >>> print(mix.cp)
-    # 1004.72217065
-    # >>> print(round(mix.mm, 6))
-    # 0.028965
     """
 
     def __init__(self):
@@ -142,7 +155,7 @@ class Janafdb(object):
         >>> db.getphasedata(formula='Oxyz')
         Traceback (most recent call last):
             ...
-        ValueError: Valid phase types are 'cr', 'l', 'cr,l', 'g', 'ref'.
+        ValueError: Valid phase types are ['cr', 'l', 'cr,l', 'g', 'ref', 'cd', 'fl', 'am', 'vit', 'mon', 'pol', 'sln', 'aq', 'sat'].
         >>> db.getphasedata(formula='Oxyz', phase='l')
         Traceback (most recent call last):
             ...
@@ -151,8 +164,9 @@ class Janafdb(object):
         """
 
         # Check that the phase type requested is valid.
-        if phase not in ['cr', 'l', 'cr,l', 'g', 'ref']:
-            raise ValueError("Valid phase types are 'cr', 'l', 'cr,l', 'g', 'ref'.")
+        validphasetypes = ['cr', 'l', 'cr,l', 'g', 'ref', 'cd', 'fl', 'am', 'vit', 'mon', 'pol', 'sln', 'aq', 'sat']
+        if phase not in validphasetypes:
+            raise ValueError("Valid phase types are " + str(validphasetypes) + ".")
 
         # We can search on either an exact formula, partial text match in the name, and exact phase type.
         formulasearch = pd.Series(np.ones(len(self.db)), dtype=bool)
@@ -189,12 +203,8 @@ class Janafdb(object):
                 with open(cachedfilename, 'w') as f:
                     f.write(textdata)
 
-        # And read the text file into a DataFrame.
-        data = pd.read_csv(StringIO(textdata), skiprows=1, delimiter='\t*', header=0, engine='python')
-
-        # TODO At this point, we should create a phase class.
-
-        return data
+        # Create a phase class and return it.
+        return JanafPhase(textdata)
 
     # def getmixturedata(self, components):
     #     """
@@ -214,7 +224,7 @@ if __name__ == '__main__':
     s = db.search('Ti')
     print(len(s))
 
-    print(db.getphasedata(formula='O2Ti', name='Rutile', phase='cr', nocache=True))
+    print(db.getphasedata(formula='O2Ti', name='Rutile', phase='cr'))
 
     # mix = db.getmixturedata([("O2 REF ELEMENT", 20.9476),
     #                          ("N2  REF ELEMENT", 78.084),
