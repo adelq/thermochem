@@ -4,6 +4,9 @@ Thermochem
 .. image:: https://travis-ci.org/adelq/thermochem.svg?branch=master
     :target: https://travis-ci.org/adelq/thermochem
 
+.. image:: https://img.shields.io/pypi/v/thermochem.svg?maxAge=2592000?style=plastic
+    :target: https://pypi.python.org/pypi/thermochem
+
 Thermochem is a package with some useful modules for Thermodynamics
 and Thermochemistry. The following tools are provided:
 
