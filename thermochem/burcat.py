@@ -195,10 +195,10 @@ class Mixture(object):
             raise StopIteration
 
     def __getitem__(self, i):
-        if type(i) == type(int()):
+        if isinstance(i, int):
             return self.mix[i]
 
-        if type(i) == type(str()):
+        if isinstance(i, str):
             elem = (None, None)
             for e in self.mix:
                 if i == e[0].formula:
