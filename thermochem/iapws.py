@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
 from __future__ import absolute_import
-from .units import Pressure, Temperature, Enthalpy
 from numpy import array, sum, sqrt
+from .units import Pressure, Temperature, Enthalpy
 
 
 class Water(object):

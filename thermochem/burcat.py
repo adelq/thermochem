@@ -311,7 +311,6 @@ class Mixture(object):
         repr_str = "<Mixture>:"
         for comp in self.mix:
             repr_str += "\n    %s at %s" % (comp[0].formula, comp[1])
-
         return repr_str
 
     def __str__(self):
