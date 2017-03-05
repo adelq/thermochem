@@ -61,6 +61,10 @@ class Temperature(float):
         return cls(data)
 
     def unit(self, units='K'):
+        """Specify temperature units, default is Kelvin.
+
+        Unit one of 'K', 'C', or 'F' for Kelvin, Celsius, or Fahrenheit
+        """
         if units == 'K':
             return self.__factory(self.data)
         elif units == 'C':
@@ -72,10 +76,12 @@ class Temperature(float):
 
     @property
     def C(self):
+        """Convert temperature to Celsius"""
         return self.__factory(K2C(self.data))
 
     @property
     def F(self):
+        """Convert temperature to Fahrenheit"""
         return self.__factory(K2F(self.data))
 
 
@@ -124,6 +130,10 @@ class Pressure(float):
         return cls(data)
 
     def unit(self, units='Pa'):
+        """Specify pressure units, default is Pascal (Pa).
+
+        Unit one of 'Pa', 'MPa', 'bar', 'psi', 'atm', 'mmwc', 'torr'.
+        """
         if units == 'Pa':
             return self.__factory(self.data)
         elif units == 'MPa':
@@ -143,26 +153,32 @@ class Pressure(float):
 
     @property
     def MPa(self):
+        """Convert pressure to megapascals"""
         return self.__factory(self.data / mega)
 
     @property
     def bar(self):
+        """Convert pressure to bars"""
         return self.__factory(self.data / bar)
 
     @property
     def psi(self):
+        """Convert pressure to pounds per square inch (psi)"""
         return self.__factory(self.data / psi)
 
     @property
     def atm(self):
+        """Convert pressure to atmospheres (atm)"""
         return self.__factory(self.data / atm)
 
     @property
     def mmwc(self):
+        """Convert pressure to millimeters of water column (mmwc)"""
         return self.__factory(self.data / (torr * 1000 / 13534))
 
     @property
     def torr(self):
+        """Convert pressure to torrs"""
         return self.__factory(self.data / torr)
 
 
@@ -204,6 +220,14 @@ class Enthalpy(float):
         return cls(data)
 
     def unit(self, units='si'):
+        """Specify enthalpy units, default is joules per kg.
+
+        Unit one of:
+          'si':      joules per kg
+          'kJkg':    kilojoules per kg
+          'kcalkg':  kilocalories per kg
+          'Btulb':   BTU per pound
+        """
         if units == 'si':
             return self.__factory(self.data)
         elif units == 'kJkg':
@@ -216,14 +240,17 @@ class Enthalpy(float):
 
     @property
     def kJkg(self):
+        """Convert enthalpy to kilojoules per kg"""
         return self.__factory(self.data / kilo)
 
     @property
     def kcalkg(self):
+        """Convert enthalpy to kilocalories per kg"""
         return self.__factory(self.data / kilo / calorie)
 
     @property
     def Btulb(self):
+        """Convert enthalpy to BTU per pound"""
         return self.__factory(self.data * lb / Btu)
 
 
@@ -262,6 +289,10 @@ class Length(float):
         return cls(data)
 
     def unit(self, units='m'):
+        """Specify length units, default is meters (m).
+
+        Unit one of 'm', 'mm', 'inch', 'ft'.
+        """
         if units == 'm':
             return self.__factory(self.data)
         elif units == 'mm':
@@ -275,14 +306,17 @@ class Length(float):
 
     @property
     def mm(self):
+        """Convert length to millimeters"""
         return self.__factory(self.data / milli)
 
     @property
     def inch(self):
+        """Convert length to inches"""
         return self.__factory(self.data / inch)
 
     @property
     def ft(self):
+        """Convert length to feet"""
         return self.__factory(self.data / foot)
 
 
@@ -313,6 +347,14 @@ class Massflow(float):
         return cls(data)
 
     def unit(self, units='kgs'):
+        """Specify mass flow units, default is kg per second.
+
+        Unit one of:
+          'kgs': kg per second
+          'kgh': kg per hour
+          'lbs': pounds per second
+          'lbh': pounds per hour
+        """
         if units == 'kgs':
             return self.__factory(self.data)
         elif units == 'kgh':
@@ -326,14 +368,17 @@ class Massflow(float):
 
     @property
     def kgh(self):
+        """Convert mass flow to kg per hour"""
         return self.__factory(self.data * hour)
 
     @property
     def lbs(self):
+        """Convert mass flow to pounds per second"""
         return self.__factory(self.data / lb)
 
     @property
     def lbh(self):
+        """Convert mass flow to pounds per hour"""
         return self.__factory(self.data * hour / lb)
 
 
