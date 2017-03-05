@@ -207,9 +207,11 @@ class Mixture(object):
             return elem
 
     def add(self, component, prop):
+        """Add a component to the mixture"""
         self.mix.append((component, prop))
 
     def delete(self, formula):
+        """Delete a formula from the mixture"""
         erased = False
         for e in self.mix:
             if e[0].formula == formula:
@@ -306,25 +308,21 @@ class Mixture(object):
         return self.extensive('go', T)
 
     def __repr__(self):
-        str = "<Mixture>:"
+        repr_str = "<Mixture>:"
         for comp in self.mix:
-            str += "\n    %s at %s" % (comp[0].formula, comp[1])
+            repr_str += "\n    %s at %s" % (comp[0].formula, comp[1])
 
-        return str
+        return repr_str
 
     def __str__(self):
-        str = "<Mixture>:"
-        for comp in self.mix:
-            str += "\n    %s at %s" % (comp[0].formula, comp[1])
-
-        return str
+        return self.__repr__()
 
     def __unicode__(self):
-        str = u"<Mixture>:"
+        repr_str = u"<Mixture>:"
         for comp in self.mix:
-            str += u"\n    %s at %s" % (comp[0].formula, comp[1])
+            repr_str += u"\n    %s at %s" % (comp[0].formula, comp[1])
 
-        return str
+        return repr_str
 
 
 class Elementdb(object):
