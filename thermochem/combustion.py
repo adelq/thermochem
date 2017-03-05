@@ -1,10 +1,10 @@
 from __future__ import division
 from __future__ import absolute_import
-from .burcat import Mixture
-from scipy import optimize
 from copy import deepcopy
+from scipy import optimize
+from .burcat import Mixture
 
-supported = 'C H N O'.split()
+SUPPORTED = 'C H N O'.split()
 
 # TODO: Check that adiabatic flame temperature is ok
 
@@ -29,7 +29,7 @@ def balance(fuel, am, phi):
 
     lamb = 1 / phi
     for element in fuel.elements:
-        if element[0] in supported:
+        if element[0] in SUPPORTED:
             atoms[element[0]] = element[1]
 
     k = lamb * (atoms['C'] + atoms['H'] / 4 + atoms['O'] / 2)
@@ -60,7 +60,6 @@ def balance_mix(fuels, phi):
     """
     reactants = {'N2': 0, 'O2': 0}
     products = {'N2': 0, 'CO2': 0, 'H2O': 0, 'O2': 0}
-    atoms = {'C': 0, 'H': 0, 'N': 0, 'O': 0}
 
     for fuel in fuels:
         (dreac, dprod) = balance(fuel[0], fuel[1], phi)
