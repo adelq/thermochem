@@ -10,10 +10,10 @@ Funding by NASA
 from __future__ import division
 from __future__ import print_function
 
+import os
 import numpy as np
 import pandas as pd
 from scipy.interpolate import interp1d
-import os
 
 try:
     # Python 3
@@ -71,7 +71,7 @@ class JanafPhase(object):
             StringIO(self.rawdata_text),
             skiprows=2,
             header=None,
-            delimiter='[\t\s]*',
+            delimiter=r'[\t\s]*',
             engine='python')
         data.columns = ['T', 'Cp', 'S', '[G-H(Tr)]/T', 'H-H(Tr)', 'Delta_fH',
                         'Delta_fG', 'log(Kf)']
