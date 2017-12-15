@@ -186,9 +186,8 @@ class Janafdb(object):
         """
 
         # Check that the phase type requested is valid.
-        if phase not in Janafdb.VALIDPHASETYPES:
-            raise ValueError("Valid phase types are " + str(
-                Janafdb.VALIDPHASETYPES) + ".")
+        if phase not in self.VALIDPHASETYPES:
+            raise ValueError("Valid phase types are %s." % self.VALIDPHASETYPES)
 
         # We can search on either an exact formula, partial text match in the
         # name, and exact phase type.
