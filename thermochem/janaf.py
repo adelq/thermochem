@@ -11,6 +11,7 @@ from __future__ import division
 from __future__ import print_function
 
 import os
+import sys
 import numpy as np
 import pandas as pd
 from scipy.interpolate import interp1d
@@ -225,6 +226,8 @@ class Janafdb(object):
             response = urllib2.urlopen(Janafdb.JANAF_URL %
                                        PhaseRecord['filename'].values[0])
             textdata = response.read()
+            if sys.version_info[0] > 2:
+                textdata = textdata.decode()
 
             # And cache the data so we aren't making unnecessary trips to the
             # web.
