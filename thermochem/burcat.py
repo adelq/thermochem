@@ -415,8 +415,8 @@ class Elementdb(object):
         """
         Returns an element instance given the name of the element.
         """
-        Tmin_ = np.empty((7), 'd')
-        _Tmax = np.empty((7), 'd')
+        Tmin_ = np.zeros(7)
+        _Tmax = np.zeros(7)
         comp = []
         for specie in self.db:
             for element in specie:
@@ -432,13 +432,10 @@ class Elementdb(object):
                         for (i, c) in zip(range(7), high):
                             _Tmax[i] = float(c.text)
 
-                        elements = phase.find("elements")
-                        elements = elements.getchildren()
+                        elements = phase.find("elements").getchildren()
                         for elem in elements:
-                            it = elem.items()
-                            # First is name of element, second is number
-                            # of atoms
-                            comp.append((it[0][1], int(it[1][1])))
+                            elem_data = elem.attrib
+                            comp.append((elem_data['name'], int(elem_data['num_of_atoms'])))
 
                         mm = float(phase.find("molecular_weight").text) / 1000
                         hfr = float(coefficients.find("hf298_div_r").text)
