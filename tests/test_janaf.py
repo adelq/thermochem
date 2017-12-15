@@ -11,5 +11,5 @@ def test_titanium():
 
 def test_rutile():
     db = Janafdb()
-    rutile = db.getphasedata(formula='O2Ti', name='Rutile', phase='cr')
+    rutile = db.getphasedata(formula='O2Ti', name='Rutile', phase='cr', cache=False)
     assert_allclose(rutile.cp([500, 550, 1800]), [67.203, 68.567, 78.283])
