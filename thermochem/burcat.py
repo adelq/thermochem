@@ -419,37 +419,31 @@ class Elementdb(object):
         _Tmax = np.empty((7), 'd')
         comp = []
         for specie in self.db:
-            try:
-                for element in specie:
-                    try:
-                        if element.tag == "phase":
-                            if formula == element.find("formula").text:
-                                phase = element
-                                coefficients = phase.find("coefficients")
-                                low = coefficients.find("range_Tmin_to_1000")
-                                for (i, c) in zip(range(7), low):
-                                    Tmin_[i] = float(c.text)
+            for element in specie:
+                if element.tag == "phase":
+                    if formula == element.find("formula").text:
+                        phase = element
+                        coefficients = phase.find("coefficients")
+                        low = coefficients.find("range_Tmin_to_1000")
+                        for (i, c) in zip(range(7), low):
+                            Tmin_[i] = float(c.text)
 
-                                high = coefficients.find("range_1000_to_Tmax")
-                                for (i, c) in zip(range(7), high):
-                                    _Tmax[i] = float(c.text)
+                        high = coefficients.find("range_1000_to_Tmax")
+                        for (i, c) in zip(range(7), high):
+                            _Tmax[i] = float(c.text)
 
-                                elements = phase.find("elements")
-                                elements = elements.getchildren()
-                                for elem in elements:
-                                    it = elem.items()
-                                    # First is name of element, second is number
-                                    # of atoms
-                                    comp.append((it[0][1], int(it[1][1])))
+                        elements = phase.find("elements")
+                        elements = elements.getchildren()
+                        for elem in elements:
+                            it = elem.items()
+                            # First is name of element, second is number
+                            # of atoms
+                            comp.append((it[0][1], int(it[1][1])))
 
-                                mm = float(phase.find("molecular_weight").text) / 1000
-                                hfr = float(coefficients.find("hf298_div_r").text)
+                        mm = float(phase.find("molecular_weight").text) / 1000
+                        hfr = float(coefficients.find("hf298_div_r").text)
 
-                                return Element(formula, Tmin_, _Tmax, mm, hfr, comp)
-                    except:
-                        pass
-            except:
-                pass
+                        return Element(formula, Tmin_, _Tmax, mm, hfr, comp)
 
     def getmixturedata(self, components):
         """
