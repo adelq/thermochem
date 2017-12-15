@@ -86,7 +86,7 @@ class JanafPhase(object):
             if np.issubdtype(data.dtypes[c], np.floating):
                 continue
             # Change INFINITE to inf
-            data.loc[data[c] == 'INFINITE', c]
+            data.loc[data[c] == 'INFINITE', c] = np.inf
             # Anything else becomes a nan.
             # Convert to floats.
             data[c] = pd.to_numeric(data[c], errors='coerce')
