@@ -71,8 +71,9 @@ class JanafPhase(object):
             StringIO(self.rawdata_text),
             skiprows=2,
             header=None,
-            delimiter=r'[\t\s]*',
-            engine='python')
+            delimiter=r'[\t\s]+',
+            engine='python'
+        )
         data.columns = ['T', 'Cp', 'S', '[G-H(Tr)]/T', 'H-H(Tr)', 'Delta_fH',
                         'Delta_fG', 'log(Kf)']
         self.rawdata = data
