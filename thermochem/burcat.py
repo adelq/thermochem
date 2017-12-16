@@ -15,7 +15,7 @@ try:
     from xml.etree.ElementTree import parse
 except ImportError:
     from elementtree import parse
-from numpy import empty, array, dot, log
+import numpy as np
 
 # Universal gas constant R
 R = 8.314472
@@ -62,11 +62,11 @@ class Element(object):
         # I know perfectly that the most efficient way of evaluatin
         # polynomials is recursively but I want the implementation to
         # be as explicit as possible
-        Ta = array([1, T, T ** 2, T ** 3, T ** 4], 'd')
+        Ta = np.array([1, T, T ** 2, T ** 3, T ** 4], 'd')
         if T > 200 and T <= 1000:
-            return dot(self.Tmin_[:5], Ta) * R
+            return np.dot(self.Tmin_[:5], Ta) * R
         elif T > 1000 and T < 6000:
-            return dot(self._Tmax[:5], Ta) * R
+            return np.dot(self._Tmax[:5], Ta) * R
         else:
             raise ValueError("Temperature out of range")
 
@@ -87,11 +87,11 @@ class Element(object):
         """
         Computes the sensible enthalpy in J/mol
         """
-        Ta = array([1, T / 2, T ** 2 / 3, T ** 3 / 4, T ** 4 / 5, 1 / T], 'd')
+        Ta = np.array([1, T / 2, T ** 2 / 3, T ** 3 / 4, T ** 4 / 5, 1 / T], 'd')
         if T > 200 and T <= 1000:
-            return dot(self.Tmin_[:6], Ta) * R * T
+            return np.dot(self.Tmin_[:6], Ta) * R * T
         elif T > 1000 and T < 6000:
-            return dot(self._Tmax[:6], Ta) * R * T
+            return np.dot(self._Tmax[:6], Ta) * R * T
         else:
             raise ValueError("Temperature out of range")
 
@@ -105,11 +105,11 @@ class Element(object):
         """
         Computes enthropy in J/mol K
         """
-        Ta = array([log(T), T, T ** 2 / 2, T ** 3 / 3, T ** 4 / 4, 0, 1], 'd')
+        Ta = np.array([np.log(T), T, T ** 2 / 2, T ** 3 / 3, T ** 4 / 4, 0, 1], 'd')
         if T > 200 and T <= 1000:
-            return dot(self.Tmin_, Ta) * R
+            return np.dot(self.Tmin_, Ta) * R
         elif T > 1000 and T < 6000:
-            return dot(self._Tmax, Ta) * R
+            return np.dot(self._Tmax, Ta) * R
         else:
             raise ValueError("Temperature out of range")
 
@@ -324,7 +324,6 @@ class Mixture(object):
 
 
 class Elementdb(object):
-
     """
     Class that reads the Alexander Burcat's thermochemical database
     for combustion.
@@ -416,41 +415,32 @@ class Elementdb(object):
         """
         Returns an element instance given the name of the element.
         """
-        Tmin_ = empty((7), 'd')
-        _Tmax = empty((7), 'd')
+        Tmin_ = np.zeros(7)
+        _Tmax = np.zeros(7)
         comp = []
         for specie in self.db:
-            try:
-                for element in specie:
-                    try:
-                        if element.tag == "phase":
-                            if formula == element.find("formula").text:
-                                phase = element
-                                coefficients = phase.find("coefficients")
-                                low = coefficients.find("range_Tmin_to_1000")
-                                for (i, c) in zip(range(7), low):
-                                    Tmin_[i] = float(c.text)
+            for element in specie:
+                if element.tag == "phase":
+                    if formula == element.find("formula").text:
+                        phase = element
+                        coefficients = phase.find("coefficients")
+                        low = coefficients.find("range_Tmin_to_1000")
+                        for (i, c) in zip(range(7), low):
+                            Tmin_[i] = float(c.text)
 
-                                high = coefficients.find("range_1000_to_Tmax")
-                                for (i, c) in zip(range(7), high):
-                                    _Tmax[i] = float(c.text)
+                        high = coefficients.find("range_1000_to_Tmax")
+                        for (i, c) in zip(range(7), high):
+                            _Tmax[i] = float(c.text)
 
-                                elements = phase.find("elements")
-                                elements = elements.getchildren()
-                                for elem in elements:
-                                    it = elem.items()
-                                    # First is name of element, second is number
-                                    # of atoms
-                                    comp.append((it[0][1], int(it[1][1])))
+                        elements = phase.find("elements").getchildren()
+                        for elem in elements:
+                            elem_data = elem.attrib
+                            comp.append((elem_data['name'], int(elem_data['num_of_atoms'])))
 
-                                mm = float(phase.find("molecular_weight").text) / 1000
-                                hfr = float(coefficients.find("hf298_div_r").text)
+                        mm = float(phase.find("molecular_weight").text) / 1000
+                        hfr = float(coefficients.find("hf298_div_r").text)
 
-                                return Element(formula, Tmin_, _Tmax, mm, hfr, comp)
-                    except:
-                        pass
-            except:
-                pass
+                        return Element(formula, Tmin_, _Tmax, mm, hfr, comp)
 
     def getmixturedata(self, components):
         """

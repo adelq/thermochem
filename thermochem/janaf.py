@@ -11,6 +11,7 @@ from __future__ import division
 from __future__ import print_function
 
 import os
+import sys
 import numpy as np
 import pandas as pd
 from scipy.interpolate import interp1d
@@ -71,8 +72,9 @@ class JanafPhase(object):
             StringIO(self.rawdata_text),
             skiprows=2,
             header=None,
-            delimiter=r'[\t\s]*',
-            engine='python')
+            delimiter=r'[\t\s]+',
+            engine='python'
+        )
         data.columns = ['T', 'Cp', 'S', '[G-H(Tr)]/T', 'H-H(Tr)', 'Delta_fH',
                         'Delta_fG', 'log(Kf)']
         self.rawdata = data
@@ -86,7 +88,7 @@ class JanafPhase(object):
             if np.issubdtype(data.dtypes[c], np.floating):
                 continue
             # Change INFINITE to inf
-            data.loc[data[c] == 'INFINITE', c]
+            data.loc[data[c] == 'INFINITE', c] = np.inf
             # Anything else becomes a nan.
             # Convert to floats.
             data[c] = pd.to_numeric(data[c], errors='coerce')
@@ -162,11 +164,11 @@ class Janafdb(object):
 
         return self.db[formulasearch | namesearch]
 
-    def getphasedata(self, formula=None, name=None, phase=None, nocache=False):
+    def getphasedata(self, formula=None, name=None, phase=None, cache=True):
         """
         Returns an element instance given the name of the element.
         formula, name and phase match the respective fields in the JANAF index.
-        nocache = True means that we will always get the data from the web.
+        cache = False means that we will always get the data from the web.
 
         >>> db = Janafdb()
         >>> db.getphasedata(formula='O2Ti', phase='cr')
@@ -184,9 +186,8 @@ class Janafdb(object):
         """
 
         # Check that the phase type requested is valid.
-        if phase not in Janafdb.VALIDPHASETYPES:
-            raise ValueError("Valid phase types are " + str(
-                Janafdb.VALIDPHASETYPES) + ".")
+        if phase not in self.VALIDPHASETYPES:
+            raise ValueError("Valid phase types are %s." % self.VALIDPHASETYPES)
 
         # We can search on either an exact formula, partial text match in the
         # name, and exact phase type.
@@ -212,8 +213,10 @@ class Janafdb(object):
 
         # At this point we have one record.  Check if we have that file cached.
         cachedfilename = os.path.join(
-            self.JANAF_cachedir, PhaseRecord['filename'].values[0] + '.txt')
-        if os.path.exists(cachedfilename) and not nocache:
+            self.JANAF_cachedir,
+            "%s.txt" % PhaseRecord['filename'].values[0]
+        )
+        if cache and os.path.exists(cachedfilename):
             # Yes it was cached, so let's read it into memory.
             with open(cachedfilename, 'r') as f:
                 textdata = f.read()
@@ -222,10 +225,12 @@ class Janafdb(object):
             response = urllib2.urlopen(Janafdb.JANAF_URL %
                                        PhaseRecord['filename'].values[0])
             textdata = response.read()
+            if sys.version_info[0] > 2:
+                textdata = textdata.decode()
 
             # And cache the data so we aren't making unnecessary trips to the
             # web.
-            if not nocache:
+            if cache:
                 with open(cachedfilename, 'w') as f:
                     f.write(textdata)
 
