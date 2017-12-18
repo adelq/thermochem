@@ -5,6 +5,7 @@ setup(
     name="thermochem",
     version=thermochem.__version__,
     description="Python utilities for thermodynamics and thermochemistry",
+    long_description=open("README.rst").read(),
     author="Adel Qalieh",
     author_email="adelq@sas.upenn.edu",
     url="https://github.com/adelq/thermochem",
