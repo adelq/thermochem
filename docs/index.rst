@@ -17,6 +17,13 @@ thermochemistry.
    :caption: Contents:
 
    burcat
+   codata
+   combustion
+   constants
+   iapws
+   janaf
+   psicrometry
+   units
 
 
 Indices and tables
