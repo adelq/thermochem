@@ -177,22 +177,22 @@ kgf = kilogram_force = g  # * 1 kg
 
 
 def C2K(C):
-    """Convert Celcius to Kelvin"""
+    """Convert Celsius to Kelvin"""
     return C + zero_Celsius
 
 
 def K2C(K):
-    """Convert Kelvin to Celcius"""
+    """Convert Kelvin to Celsius"""
     return K - zero_Celsius
 
 
 def F2C(F):
-    """Convert Fahrenheit to Celcius"""
+    """Convert Fahrenheit to Celsius"""
     return (F - 32) / 1.8
 
 
 def C2F(C):
-    """Convert Celcius to Fahrenheit"""
+    """Convert Celsius to Fahrenheit"""
     return 1.8 * C + 32
 
 
