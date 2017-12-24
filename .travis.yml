@@ -24,5 +24,14 @@ install:
 script: nosetests -v
 
 notifications:
-  email:
-    false
+  email: false
+
+deploy:
+  provider: pypi
+  user: adelq
+  password:
+    secure: LzLTdY6LEtz3tD2mj/ocbHF+3IN021Qd2CYaV3qHa5j0ZuvfP3iH/N5kV/ilXqOKwXKF8i0qHHNfE/ITaNygC8uEjz78ypoXSAgOvnjz/FQyKtw0bhCfuCT3g4oqHv0tTBo4uGRlUwyi3hdg9Ng2byikjnF1hzmfnqAeWWLoWYU=
+  distributions: sdist bdist_wheel
+  on:
+    tags: true
+    repo: adelq/thermochem
