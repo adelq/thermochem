@@ -7,6 +7,10 @@ Thermochem
 .. image:: https://img.shields.io/pypi/v/thermochem.svg?maxAge=2592000?style=plastic
     :target: https://pypi.python.org/pypi/thermochem
 
+.. image:: https://readthedocs.org/projects/thermochem/badge/?version=latest
+   :target: http://thermochem.readthedocs.io/en/latest/?badge=latest
+   :alt: Documentation Status
+
 Thermochem is a package with some useful modules for Thermodynamics
 and Thermochemistry. The following tools are provided:
 
