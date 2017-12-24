@@ -98,6 +98,7 @@ html_theme = 'alabaster'
 html_theme_options = {
     'github_user': 'adelq',
     'github_repo': 'thermochem',
+    'show_powered_by': False,
     'show_related': True
 }
 
