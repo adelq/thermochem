@@ -3,14 +3,16 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to thermochem's documentation!
-======================================
-
+Thermochem documentation
+========================
 
 Release v\ |version|.
 
 Thermochem is a Python library with some useful modules for thermodynamics and
 thermochemistry.
+
+API Documentation
+-----------------
 
 .. toctree::
    :maxdepth: 2
@@ -26,8 +28,17 @@ thermochemistry.
    units
 
 
+Contributor Guide
+-----------------
+
+.. toctree::
+   :maxdepth: 2
+
+   authors
+
+
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`
