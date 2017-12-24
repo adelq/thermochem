@@ -11,6 +11,15 @@ Release v\ |version|.
 Thermochem is a Python library with some useful modules for thermodynamics and
 thermochemistry.
 
+User Guide
+----------
+
+.. toctree::
+   :maxdepth: 2
+
+   install
+
+
 API Documentation
 -----------------
 
