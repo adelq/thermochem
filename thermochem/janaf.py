@@ -203,18 +203,18 @@ class Janafdb(object):
         searchmatch = formulasearch & namesearch & phasesearch
 
         # Get the record (should be one record) which specifies this phase.
-        PhaseRecord = self.db[searchmatch]
-        if len(PhaseRecord) == 0:
+        phase_record = self.db[searchmatch]
+        if len(phase_record) == 0:
             raise ValueError("Did not find %s, %s, (%s)" %
                              (formula, name, phase))
-        if len(PhaseRecord) > 1:
+        if len(phase_record) > 1:
             raise ValueError("There are %d records matching this pattern." %
-                             len(PhaseRecord))
+                             len(phase_record))
 
         # At this point we have one record.  Check if we have that file cached.
         cachedfilename = os.path.join(
             self.JANAF_cachedir,
-            "%s.txt" % PhaseRecord['filename'].values[0]
+            "%s.txt" % phase_record['filename'].values[0]
         )
         if cache and os.path.exists(cachedfilename):
             # Yes it was cached, so let's read it into memory.
@@ -223,7 +223,7 @@ class Janafdb(object):
         else:
             # No it was not cached so let's get it from the web.
             response = urllib2.urlopen(Janafdb.JANAF_URL %
-                                       PhaseRecord['filename'].values[0])
+                                       phase_record['filename'].values[0])
             textdata = response.read()
             if sys.version_info[0] > 2:
                 textdata = textdata.decode()
