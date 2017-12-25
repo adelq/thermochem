@@ -1,5 +1,5 @@
 """
-This module gets thermodynamic datat from the JANAF database.
+This module gets thermodynamic data from the JANAF database.
 Files are downloaded from the NIST servers as needed and then cached locally.
 
 Zack Gainsforth
