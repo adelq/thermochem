@@ -6,8 +6,6 @@ Ruscic. It needs the actual database BURCAT_THR.xml (xml format) to
 run.
 """
 
-# TODO: Introduce the exception in all try-except clauses
-
 from __future__ import division
 from __future__ import print_function
 import os
