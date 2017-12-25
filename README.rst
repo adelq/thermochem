@@ -11,6 +11,10 @@ Thermochem
    :target: http://thermochem.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
 
+.. image:: https://landscape.io/github/adelq/thermochem/master/landscape.svg?style=flat
+   :target: https://landscape.io/github/adelq/thermochem/master
+   :alt: Code Health
+
 Thermochem is a package with some useful modules for Thermodynamics
 and Thermochemistry. The following tools are provided:
 
