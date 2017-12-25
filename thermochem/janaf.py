@@ -204,7 +204,7 @@ class Janafdb(object):
 
         # Get the record (should be one record) which specifies this phase.
         phase_record = self.db[searchmatch]
-        if len(phase_record) == 0:
+        if not phase_record:
             raise ValueError("Did not find %s, %s, (%s)" %
                              (formula, name, phase))
         if len(phase_record) > 1:
