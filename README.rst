@@ -31,23 +31,43 @@ and Thermochemistry. The following tools are provided:
  
 -  Moist gas model.
 
+Requirements
+------------
+
+- Python 2.7 or Python 3.4+
+
+- Linux, Windows, MacOS, BSD, and any other platform with Python support and can
+  install the required dependencies.
+
+Install
+-------
+
+The easy and quick way::
+
+    $ pip install thermochem
+
+For more details and alternate installation instructions, see the `installation
+instructions <http://thermochem.readthedocs.io/en/stable/install.html>`_.
+
 Dependencies
 ------------
 
-This packages needs the following extra modules to run.
+This packages depends on the following modules to run. These should be installed
+automatically with any of the installation instructions provided.
 
--  Python 2.7, 3.4, and 3.5
+-  NumPy >= 1.1.0
 
--  Numpy >= 1.1.0
+-  SciPy >= 0.6.0
 
--  Scipy >= 0.6.0
-
--  Pandas >= 0.18.0
-
--  setuptools >= 0.6
+-  pandas >= 0.18.0
 
 Development
 -----------
 
 If you want to further develop thermochem you must install nosetests for
 testing.
+
+License
+-------
+
+Thermochem is licensed under the BSD license.
