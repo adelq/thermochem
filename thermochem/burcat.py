@@ -2,8 +2,8 @@
 This module extracts the information provided in "Third millenium
 Ideal Gas and Condensed Phase Thermochemical Database for Combustion
 with Updates from Active Thermochemical Tables. A. Burcat and B
-Ruscic. It needs the actual database BURCAT_THR.xml (xml format) to
-run.
+Ruscic". It needs the actual database BURCAT_THR.xml (xml format) to
+run, which is already included in the thermochem library.
 """
 
 from __future__ import division
