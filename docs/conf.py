@@ -177,6 +177,3 @@ texinfo_documents = [
      author, 'thermochem', 'One line description of project.',
      'Miscellaneous'),
 ]
-
-
-
