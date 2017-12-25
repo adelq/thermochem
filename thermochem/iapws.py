@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
 from __future__ import absolute_import
-from numpy import array, sum, sqrt
+import numpy as np
 from .units import Pressure, Temperature, Enthalpy
 
 
@@ -25,17 +25,19 @@ class Water(object):
     rc = 322  # Triple point density kg/m3
 
     data = {
-        'n': array([0.11670521452767E4,
-                    - 0.72421316703206E6,
-                    - 0.17073846940092E2,
-                    0.12020824702470E5,
-                    - 0.32325550322333E7,
-                    0.14915108613530E2,
-                    - 0.48232657361591E4,
-                    0.40511340542057E6,
-                    - 0.23855557567849,
-                    0.65017534844798E3], 'd'),
-        'pT_datar1': array([
+        'n': np.array([
+            0.11670521452767E4,
+            - 0.72421316703206E6,
+            - 0.17073846940092E2,
+            0.12020824702470E5,
+            - 0.32325550322333E7,
+            0.14915108613530E2,
+            - 0.48232657361591E4,
+            0.40511340542057E6,
+            - 0.23855557567849,
+            0.65017534844798E3
+        ], 'd'),
+        'pT_datar1': np.array([
             [0, -2, 0.14632971213167],
             [0, -1, -0.84548187169114],
             [0, 0, -0.37563603672040E1],
@@ -70,7 +72,7 @@ class Water(object):
             [30, -39, -0.11947622640071E-22],
             [31, -40, 0.18228094581404E-23],
             [32, -41, -0.93537087292458E-25]], 'd'),
-        'pT_datar20': array([
+        'pT_datar20': np.array([
             [0, -0.96927686500217E1],
             [1, 0.10086655968018E2],
             [-5, -0.56087911283020E-2],
@@ -80,7 +82,7 @@ class Water(object):
             [-1, -0.43839511319450E1],
             [2, -0.28408632460772],
             [3, 0.21268463753307E-1]], 'd'),
-        'pT_datar2r': array([
+        'pT_datar2r': np.array([
             [1, 0, -0.17731742473213E-2],
             [1, 1, -0.17834862292358E-1],
             [1, 2, -0.45996013696365E-1],
@@ -166,7 +168,7 @@ class Water(object):
         A = v ** 2 + n[0] * v + n[1]
         B = n[2] * v ** 2 + n[3] * v + n[4]
         C = n[5] * v ** 2 + n[6] * v + n[7]
-        return Pressure(((2 * C) / (-B + sqrt(B ** 2 - 4 * A * C))) ** 4).unit('MPa')
+        return Pressure(((2 * C) / (-B + np.sqrt(B ** 2 - 4 * A * C))) ** 4).unit('MPa')
 
     def Tsat(self, p):
         """
@@ -205,9 +207,9 @@ class Water(object):
         E = beta ** 2 + n[2] * beta + n[5]
         F = n[0] * beta ** 2 + n[3] * beta + n[6]
         G = n[1] * beta ** 2 + n[4] * beta + n[7]
-        D = (2 * G) / (-F - sqrt(F ** 2 - 4 * E * G))
+        D = (2 * G) / (-F - np.sqrt(F ** 2 - 4 * E * G))
 
-        return Temperature(0.5 * (n[9] + D - sqrt((n[9] + D) ** 2 - 4 * (n[8] + n[9] * D))))
+        return Temperature(0.5 * (n[9] + D - np.sqrt((n[9] + D) ** 2 - 4 * (n[8] + n[9] * D))))
 
     def h(self, p, T):
         """
@@ -238,7 +240,7 @@ class Water(object):
             n = raw_data[:, 2]
 
             return Enthalpy(
-                self.R * T * tau * sum((n * (7.1 - pi) ** I) * J * ((tau - 1.222) ** (J - 1))))
+                self.R * T * tau * np.sum((n * (7.1 - pi) ** I) * J * ((tau - 1.222) ** (J - 1))))
 
         if p < self.psat(T).MPa:
             # steam, pressure under saturation pressure
@@ -254,8 +256,8 @@ class Water(object):
             J = raw_datar[:, 1]
             n = raw_datar[:, 2]
 
-            g0_tau = sum(n0 * J0 * tau ** (J0 - 1))
-            gr_tau = sum(n * pi ** I * J * (tau - 0.5) ** (J - 1))
+            g0_tau = np.sum(n0 * J0 * tau ** (J0 - 1))
+            gr_tau = np.sum(n * pi ** I * J * (tau - 0.5) ** (J - 1))
 
             return Enthalpy(self.R * T * tau * (g0_tau + gr_tau))
 
@@ -273,7 +275,7 @@ class Water(object):
         """
         eta = h / 2500.
 
-        raw_data = array([
+        raw_data = np.array([
             [1, 0, 0, -0.23872489924521E3],
             [2, 0, 1, 0.40421188637945E3],
             [3, 0, 2, 0.11349746881718E3],
@@ -300,7 +302,7 @@ class Water(object):
         J = raw_data[:, 2]
         n = raw_data[:, 3]
 
-        raw_data2 = array([
+        raw_data2 = np.array([
             [1, 0, 0, 0.10898952318288E4],
             [2, 0, 1, 0.84951654495535E3],
             [3, 0, 2, -0.10781748091826E3],
@@ -342,4 +344,4 @@ class Water(object):
         J2 = raw_data2[:, 2]
         n2 = raw_data2[:, 3]
 
-        return (sum(n * p ** I * (eta + 1) ** J), sum(n2 * p ** I2 * (eta2 - 2.1) ** J2))
+        return (np.sum(n * p ** I * (eta + 1) ** J), np.sum(n2 * p ** I2 * (eta2 - 2.1) ** J2))
