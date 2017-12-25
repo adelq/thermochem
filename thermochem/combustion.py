@@ -4,7 +4,7 @@ from copy import deepcopy
 from scipy import optimize
 from .burcat import Mixture
 
-SUPPORTED = 'C H N O'.split()
+SUPPORTED = ['C', 'H', 'N', 'O']
 
 # TODO: Check that adiabatic flame temperature is ok
 
