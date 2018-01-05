@@ -1,9 +1,7 @@
-include README
+include README.rst
 include LICENSE
-include AUTHORS
+include AUTHORS.rst
 include TODO
-
-include ez_setup.py
 
 recursive-include thermochem *.xml
 recursive-include thermochem *.txt
