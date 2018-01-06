@@ -48,7 +48,7 @@ class Element(object):
 
     def density(self, p, T):
         """
-        Density in kg/m3.
+        Density in kg/m³.
         """
         return p * self.mm / R / T
 
@@ -238,7 +238,7 @@ class Mixture(object):
 
     def density(self, p, T):
         """
-        Computes the density for a given mix of gases in kg/m3
+        Computes the density for a given mix of gases in kg/m³
 
         The equivalent R for a mix is :math:`R_m = \\frac{R_u}{M_n}`,
         where :math:`M_n` is the equivalent molar mass for the mix.
