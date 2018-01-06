@@ -56,7 +56,7 @@ class Element(object):
         """
         Calculates the specific heat capacity in J/mol K
         """
-        # I know perfectly that the most efficient way of evaluatin
+        # I know perfectly that the most efficient way of evaluating
         # polynomials is recursively but I want the implementation to
         # be as explicit as possible
         Ta = np.array([1, T, T ** 2, T ** 3, T ** 4], 'd')
@@ -100,7 +100,7 @@ class Element(object):
 
     def so(self, T):
         """
-        Computes enthropy in J/mol K
+        Computes entropy in J/mol K
         """
         Ta = np.array([np.log(T), T, T ** 2 / 2, T ** 3 / 3, T ** 4 / 4, 0, 1], 'd')
         if T > 200 and T <= 1000:
@@ -336,8 +336,8 @@ class Elementdb(object):
 
     The reference temperature for enthalpy is 298.15 K
 
-    >>> print('enthropy',oxygen.so(298))
-    enthropy 205.133745795
+    >>> print('entropy',oxygen.so(298))
+    entropy 205.133745795
     >>> print('gibbs free energy',oxygen.go(298))
     gibbs free energy -61134.2629008
 
