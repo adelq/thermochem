@@ -1,9 +1,9 @@
 """
-This module extracts the information provided in "Third millenium
-Ideal Gas and Condensed Phase Thermochemical Database for Combustion
-with Updates from Active Thermochemical Tables. A. Burcat and B
-Ruscic". It needs the actual database BURCAT_THR.xml (xml format) to
-run, which is already included in the thermochem library.
+This module extracts the information provided in *Third Millennium Ideal Gas
+and Condensed Phase Thermochemical Database for Combustion with Updates from
+Active Thermochemical Tables* by A. Burcat and B. Ruscic. It needs the actual
+database BURCAT_THR.xml to run, which is already included in the thermochem
+library.
 """
 
 from __future__ import division
@@ -20,7 +20,6 @@ R = 8.314472
 
 
 class Element(object):
-
     """
     This is a helper class.  It is intended to be created via an
     Elementdb object but you can use it by your own. Take a look at
