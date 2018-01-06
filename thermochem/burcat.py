@@ -22,11 +22,11 @@ R = 8.314472
 class Element(object):
     """
     This is a helper class.  It is intended to be created via an
-    Elementdb object but you can use it by your own. Take a look at
-    Elementdb class.
+    Elementdb object but it can be used on its own. Take a look at
+    Elementdb class for example usage.
 
-    Units are K, J, kg... conversion functions are provided in the
-    external units module.
+    Units are in standard units: K, J, kg. Conversion functions are provided in
+    the external units module.
 
     One extra feature not explained in Elementdb documentation is that
     it contains the number of each atom, useful for computing chemical
@@ -131,13 +131,12 @@ class Element(object):
 
 
 class Mixture(object):
-
     """
-    Class that models a gas mixture. By now only volume (molar)
-    composition is supported.
+    Class that models a gas mixture. Currently, only volume (molar)
+    compositions are supported.
 
-    You can iterate through all its elements.  The item returned is a
-    tuple containing the element and the amount.
+    You can iterate through all its elements. The item returned is a tuple
+    containing the element and the amount.
 
     >>> db = Elementdb()
     >>> mix = db.getmixturedata([("O2 REF ELEMENT",20.9476),\
@@ -157,8 +156,7 @@ class Mixture(object):
     >>> print(mix['CO2'])
     (<element> CO2, 0.0319)
 
-    You can also delete components of a mixture.  Needed by the
-    MoistAir class
+    You can also delete components of a mixture. Needed by the MoistAir class
 
     >>> mix.delete('CO2')
     >>> print(mix)
@@ -173,8 +171,8 @@ class Mixture(object):
         self.config = config
         self.idx = 0
 
-    # The following two functions are an iterator. Its purpose is to
-    # be able to iterate through all the elements of a mix.
+    # The following functions are an iterator. Its purpose is to be able to
+    # iterate through all the elements of a mix.
     def __iter__(self):
         return self
 
@@ -249,9 +247,9 @@ class Mixture(object):
 
     def extensive(self, attr, T):
         """
-        Computes the extensive value for a mix.  Remember that an
-        extensive value depends on the amount of matter. Enthalpy and
-        volume are extensive values.
+        Computes the extensive value for a mix. Remember that an extensive
+        value depends on the amount of matter. Enthalpy and volume are
+        extensive values.
 
         .. math::
 
