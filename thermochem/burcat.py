@@ -277,28 +277,41 @@ class Mixture(object):
 
     def cp_(self, T):
         """
-        Computes the heat capacity at a given temperature
-
+        Computes the heat capacity at a given temperature in J/kg K.
         """
         return self.extensive('cp_', T)
 
     @property
     def cp(self):
         """
-        Computes the heat capacity
+        Computes the heat capacity at room temperature, 298.15K.
+        Results in J/kg K.
         """
         return self.extensive('cp_', 298.15)
 
     def ho(self, T):
+        """
+        Estimate the sensible enthalpy of the mixture in J/mol.
+        """
         return self.extensive('ho', T)
 
     def h(self, T):
+        """
+        Estimate the total enthalpy of the mixture in J/kg.
+        """
         return self.cp_(T) * T
 
     def so(self, T):
+        """
+        Estimate the entropy of the mixture in J/mol K.
+        """
         return self.extensive('so', T)
 
     def go(self, T):
+        """
+        Estimate the Gibbs free energy using the sensible enthalpy of the
+        mixture in J/mol.
+        """
         return self.extensive('go', T)
 
     def __repr__(self):
