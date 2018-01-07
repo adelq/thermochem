@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 This module extracts the information provided in *Third Millennium Ideal Gas
 and Condensed Phase Thermochemical Database for Combustion with Updates from
