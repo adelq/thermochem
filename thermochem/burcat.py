@@ -1,9 +1,10 @@
+# -*- coding: utf-8 -*-
 """
-This module extracts the information provided in "Third millenium
-Ideal Gas and Condensed Phase Thermochemical Database for Combustion
-with Updates from Active Thermochemical Tables. A. Burcat and B
-Ruscic". It needs the actual database BURCAT_THR.xml (xml format) to
-run, which is already included in the thermochem library.
+This module extracts the information provided in *Third Millennium Ideal Gas
+and Condensed Phase Thermochemical Database for Combustion with Updates from
+Active Thermochemical Tables* by A. Burcat and B. Ruscic. It needs the actual
+database BURCAT_THR.xml to run, which is already included in the thermochem
+library.
 """
 
 from __future__ import division
@@ -20,14 +21,13 @@ R = 8.314472
 
 
 class Element(object):
-
     """
     This is a helper class.  It is intended to be created via an
-    Elementdb object but you can use it by your own. Take a look at
-    Elementdb class.
+    Elementdb object but it can be used on its own. Take a look at
+    Elementdb class for example usage.
 
-    Units are K, J, kg... conversion functions are provided in the
-    external units module.
+    Units are in standard units: K, J, kg. Conversion functions are provided in
+    the external units module.
 
     One extra feature not explained in Elementdb documentation is that
     it contains the number of each atom, useful for computing chemical
@@ -49,7 +49,7 @@ class Element(object):
 
     def density(self, p, T):
         """
-        Density in kg/m3.
+        Density in kg/m³.
         """
         return p * self.mm / R / T
 
@@ -57,7 +57,7 @@ class Element(object):
         """
         Calculates the specific heat capacity in J/mol K
         """
-        # I know perfectly that the most efficient way of evaluatin
+        # I know perfectly that the most efficient way of evaluating
         # polynomials is recursively but I want the implementation to
         # be as explicit as possible
         Ta = np.array([1, T, T ** 2, T ** 3, T ** 4], 'd')
@@ -101,7 +101,7 @@ class Element(object):
 
     def so(self, T):
         """
-        Computes enthropy in J/mol K
+        Computes entropy in J/mol K
         """
         Ta = np.array([np.log(T), T, T ** 2 / 2, T ** 3 / 3, T ** 4 / 4, 0, 1], 'd')
         if T > 200 and T <= 1000:
@@ -132,13 +132,12 @@ class Element(object):
 
 
 class Mixture(object):
-
     """
-    Class that models a gas mixture. By now only volume (molar)
-    composition is supported.
+    Class that models a gas mixture. Currently, only volume (molar)
+    compositions are supported.
 
-    You can iterate through all its elements.  The item returned is a
-    tuple containing the element and the amount.
+    You can iterate through all its elements. The item returned is a tuple
+    containing the element and the amount.
 
     >>> db = Elementdb()
     >>> mix = db.getmixturedata([("O2 REF ELEMENT",20.9476),\
@@ -158,8 +157,7 @@ class Mixture(object):
     >>> print(mix['CO2'])
     (<element> CO2, 0.0319)
 
-    You can also delete components of a mixture.  Needed by the
-    MoistAir class
+    You can also delete components of a mixture. Needed by the MoistAir class
 
     >>> mix.delete('CO2')
     >>> print(mix)
@@ -174,8 +172,8 @@ class Mixture(object):
         self.config = config
         self.idx = 0
 
-    # The following two functions are an iterator. Its purpose is to
-    # be able to iterate through all the elements of a mix.
+    # The following functions are an iterator. Its purpose is to be able to
+    # iterate through all the elements of a mix.
     def __iter__(self):
         return self
 
@@ -241,7 +239,7 @@ class Mixture(object):
 
     def density(self, p, T):
         """
-        Computes the density for a given mix of gases in kg/m3
+        Computes the density for a given mix of gases in kg/m³
 
         The equivalent R for a mix is :math:`R_m = \\frac{R_u}{M_n}`,
         where :math:`M_n` is the equivalent molar mass for the mix.
@@ -250,9 +248,9 @@ class Mixture(object):
 
     def extensive(self, attr, T):
         """
-        Computes the extensive value for a mix.  Remember that an
-        extensive value depends on the amount of matter. Enthalpy and
-        volume are extensive values.
+        Computes the extensive value for a mix. Remember that an extensive
+        value depends on the amount of matter. Enthalpy and volume are
+        extensive values.
 
         .. math::
 
@@ -280,28 +278,41 @@ class Mixture(object):
 
     def cp_(self, T):
         """
-        Computes the heat capacity at a given temperature
-
+        Computes the heat capacity at a given temperature in J/kg K.
         """
         return self.extensive('cp_', T)
 
     @property
     def cp(self):
         """
-        Computes the heat capacity
+        Computes the heat capacity at room temperature, 298.15K.
+        Results in J/kg K.
         """
         return self.extensive('cp_', 298.15)
 
     def ho(self, T):
+        """
+        Estimate the sensible enthalpy of the mixture in J/mol.
+        """
         return self.extensive('ho', T)
 
     def h(self, T):
+        """
+        Estimate the total enthalpy of the mixture in J/kg.
+        """
         return self.cp_(T) * T
 
     def so(self, T):
+        """
+        Estimate the entropy of the mixture in J/mol K.
+        """
         return self.extensive('so', T)
 
     def go(self, T):
+        """
+        Estimate the Gibbs free energy using the sensible enthalpy of the
+        mixture in J/mol.
+        """
         return self.extensive('go', T)
 
     def __repr__(self):
@@ -337,8 +348,8 @@ class Elementdb(object):
 
     The reference temperature for enthalpy is 298.15 K
 
-    >>> print('enthropy',oxygen.so(298))
-    enthropy 205.133745795
+    >>> print('entropy',oxygen.so(298))
+    entropy 205.133745795
     >>> print('gibbs free energy',oxygen.go(298))
     gibbs free energy -61134.2629008
 
@@ -416,29 +427,34 @@ class Elementdb(object):
         Tmin_ = np.zeros(7)
         _Tmax = np.zeros(7)
         comp = []
+
+        def element_matches(element, formula):
+            """Check if element matches a formula"""
+            phase_element = element.tag == "phase"
+            return phase_element and element.find("formula").text == formula
+
         for specie in self.db:
             for element in specie:
-                if element.tag == "phase":
-                    if formula == element.find("formula").text:
-                        phase = element
-                        coefficients = phase.find("coefficients")
-                        low = coefficients.find("range_Tmin_to_1000")
-                        for (i, c) in zip(range(7), low):
-                            Tmin_[i] = float(c.text)
+                if element_matches(element, formula):
+                    phase = element
+                    coefficients = phase.find("coefficients")
+                    low = coefficients.find("range_Tmin_to_1000")
+                    for i, c in zip(range(7), low):
+                        Tmin_[i] = float(c.text)
 
-                        high = coefficients.find("range_1000_to_Tmax")
-                        for (i, c) in zip(range(7), high):
-                            _Tmax[i] = float(c.text)
+                    high = coefficients.find("range_1000_to_Tmax")
+                    for i, c in zip(range(7), high):
+                        _Tmax[i] = float(c.text)
 
-                        elements = phase.find("elements").getchildren()
-                        for elem in elements:
-                            elem_data = elem.attrib
-                            comp.append((elem_data['name'], int(elem_data['num_of_atoms'])))
+                    elements = phase.find("elements").getchildren()
+                    for elem in elements:
+                        elem_data = elem.attrib
+                        comp.append((elem_data['name'], int(elem_data['num_of_atoms'])))
 
-                        mm = float(phase.find("molecular_weight").text) / 1000
-                        hfr = float(coefficients.find("hf298_div_r").text)
+                    mm = float(phase.find("molecular_weight").text) / 1000
+                    hfr = float(coefficients.find("hf298_div_r").text)
 
-                        return Element(formula, Tmin_, _Tmax, mm, hfr, comp)
+                    return Element(formula, Tmin_, _Tmax, mm, hfr, comp)
 
     def getmixturedata(self, components):
         """
