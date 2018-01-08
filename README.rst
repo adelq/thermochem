@@ -55,11 +55,11 @@ Dependencies
 This packages depends on the following modules to run. These should be installed
 automatically with any of the installation instructions provided.
 
--  NumPy >= 1.1.0
+-  NumPy >= 1.2.1
 
 -  SciPy >= 0.6.0
 
--  pandas >= 0.18.0
+-  pandas >= 0.17.0
 
 Development
 -----------
