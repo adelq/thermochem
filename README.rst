@@ -4,7 +4,7 @@ Thermochem
 .. image:: https://travis-ci.org/adelq/thermochem.svg?branch=master
     :target: https://travis-ci.org/adelq/thermochem
 
-.. image:: https://img.shields.io/pypi/v/thermochem.svg?maxAge=2592000?style=plastic
+.. image:: https://img.shields.io/pypi/v/thermochem.svg?maxAge=2592000
     :target: https://pypi.python.org/pypi/thermochem
 
 .. image:: https://readthedocs.org/projects/thermochem/badge/?version=latest
