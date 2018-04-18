@@ -140,10 +140,10 @@ class Mixture(object):
     containing the element and the amount.
 
     >>> db = Elementdb()
-    >>> mix = db.getmixturedata([("O2 REF ELEMENT",20.9476),\
-    ("N2  REF ELEMENT",78.084),\
-    ("CO2",0.0319),\
-    ("AR REF ELEMENT",0.9365),\
+    >>> mix = db.getmixturedata([("O2 REF ELEMENT", 20.9476),\
+    ("N2  REF ELEMENT", 78.084),\
+    ("CO2", 0.0319),\
+    ("AR REF ELEMENT", 0.9365),\
     ])
     >>> mix_list = [(e[0], round(e[1], 6)) for e in mix]
     >>> for e in mix_list: print(e)
@@ -341,39 +341,39 @@ class Elementdb(object):
     >>> oxygen = db.getelementdata("O2 REF ELEMENT")
     >>> print(oxygen)
     <element> O2 REF ELEMENT
-    >>> print('molar mass',oxygen.mm)
+    >>> print('molar mass', oxygen.mm)
     molar mass 0.0319988
-    >>> print('heat capacity',oxygen.cp)
-    heat capacity 918.078952423
+    >>> print('heat capacity', round(oxygen.cp, 6))
+    heat capacity 918.078952
 
     The reference temperature for enthalpy is 298.15 K
 
-    >>> print('entropy',oxygen.so(298))
-    entropy 205.133745795
-    >>> print('gibbs free energy',oxygen.go(298))
-    gibbs free energy -61134.2629008
+    >>> print('entropy', round(oxygen.so(298), 6))
+    entropy 205.133746
+    >>> print('gibbs free energy', round(oxygen.go(298), 6))
+    gibbs free energy -61134.262901
 
-    There's a search function.  It is very useful because some names
-    are a bit tricky.  Well, not this one.
+    There's a search function. It is very useful because some names
+    are a bit tricky. Well, not this one.
 
     >>> db.search("AIR")
     ['AIR']
     >>> air = db.getelementdata("AIR")
-    >>> print('air molar mass',air.mm)
+    >>> print('air molar mass', air.mm)
     air molar mass 0.02896518
-    >>> print('heat capacity',air.cp)
-    heat capacity 1004.77625096
-    >>> print(round(air.density(101325,298), 6))
+    >>> print('heat capacity', round(air.cp, 6))
+    heat capacity 1004.776251
+    >>> print(round(air.density(101325, 298), 6))
     1.184519
 
     The element database can create also mixtures.  It returns an
     instance of Mixture object that can give you the same as the
     Element class for any mixture.
 
-    >>> mix = db.getmixturedata([("O2 REF ELEMENT",20.9476),\
-    ("N2  REF ELEMENT",78.084),\
-    ("CO2",0.0319),\
-    ("AR REF ELEMENT",0.9365),\
+    >>> mix = db.getmixturedata([("O2 REF ELEMENT", 20.9476),\
+    ("N2  REF ELEMENT", 78.084),\
+    ("CO2", 0.0319),\
+    ("AR REF ELEMENT", 0.9365),\
     ])
     >>> print(mix)
     <Mixture>:
@@ -381,8 +381,8 @@ class Elementdb(object):
         N2  REF ELEMENT at 78.084
         CO2 at 0.0319
         AR REF ELEMENT at 0.9365
-    >>> print(mix.cp)
-    1004.72217065
+    >>> print(round(mix.cp, 6))
+    1004.722171
     >>> print(round(mix.mm, 6))
     0.028965
     """
