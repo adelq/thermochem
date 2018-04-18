@@ -118,7 +118,7 @@ class Janafdb(object):
     """
     VALIDPHASETYPES = ['cr', 'l', 'cr,l', 'g', 'ref', 'cd', 'fl', 'am', 'vit',
                        'mon', 'pol', 'sln', 'aq', 'sat']
-    JANAF_URL = "http://kinetics.nist.gov/janaf/html/%s.txt"
+    JANAF_URL = "https://janaf.nist.gov/tables/%s.txt"
 
     def __init__(self):
         """
