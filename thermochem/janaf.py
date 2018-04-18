@@ -44,7 +44,7 @@ class JanafPhase(object):
     >>> db = Janafdb()
     >>> p = db.getphasedata(formula='O2Ti', name='Rutile', phase='cr')
     >>> print(p.cp([500, 550, 1800]))
-    [ 67.203  68.567  78.283]
+    [67.203  68.567  78.283]
     >>> print(p.S([500, 550, 1800]))
     [  82.201    88.4565  176.876 ]
     >>> print(p.gef([500, 550, 1800]))
@@ -56,7 +56,7 @@ class JanafPhase(object):
     >>> print(p.DeltaG([500, 550, 1800]))
     [-852157.  -843046.5 -621013. ]
     >>> print(p.logKf([500, 550, 1800]))
-    [ 89.024   80.8125  18.021 ]
+    [89.024   80.8125  18.021 ]
     >>> print(p.cp(50000))
     Traceback (most recent call last):
         ...
