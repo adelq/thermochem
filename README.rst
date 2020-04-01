@@ -34,7 +34,7 @@ and Thermochemistry. The following tools are provided:
 Requirements
 ------------
 
-- Python 2.7 or Python 3.4+
+- Python 2.7 or Python 3.5+
 
 - Linux, Windows, MacOS, BSD, and any other platform with Python support and can
   install the required dependencies.
