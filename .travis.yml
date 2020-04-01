@@ -4,6 +4,8 @@ python:
   - "3.4"
   - "3.5"
   - "3.6"
+  - "3.7"
+  - "3.8"
 
 install:
   - sudo apt-get update
@@ -17,7 +19,7 @@ install:
   - hash -r
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
-  - deps='pip nose numpy scipy coverage'
+  - deps='pip nose numpy scipy pandas coverage'
   - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION $deps
   - source activate test-environment
   - python setup.py install
