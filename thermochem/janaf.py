@@ -152,7 +152,7 @@ class Janafdb(object):
         to load thermodynamic constants for TiO2, rutile.
     """
     VALIDPHASETYPES = ['cr', 'l', 'cr,l', 'g', 'ref', 'cd', 'fl', 'am', 'vit',
-                       'mon', 'pol', 'sln', 'aq', 'sat', None]
+                       'mon', 'pol', 'sln', 'aq', 'sat']
     JANAF_URL = "https://janaf.nist.gov/tables/%s.txt"
 
     def __init__(self):
@@ -232,7 +232,7 @@ class Janafdb(object):
         # Check that the phase type requested is valid.
         if phase is not None:
             phase = phase.lower()
-        if phase not in self.VALIDPHASETYPES:
+        if phase is not None and phase not in self.VALIDPHASETYPES:
             raise ValueError("Valid phase types are %s." % self.VALIDPHASETYPES)
 
         # We can search on either an exact formula, partial text match in the
