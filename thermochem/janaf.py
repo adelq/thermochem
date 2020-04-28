@@ -69,8 +69,6 @@ class JanafPhase(object):
     ValueError: A value in x_new is above the interpolation range.
     """
 
-    # TODO On these docstrings, they actually print array([89,90,18]) rather than [89,90,18].  Is this going to throw off CI?
-
     def __init__(self, rawdata_text):
         # Store the raw data text file from NIST.
         self.rawdata_text = rawdata_text
@@ -86,12 +84,10 @@ class JanafPhase(object):
             engine='python',
             names=['T', 'Cp', 'S', '[G-H(Tr)]/T', 'H-H(Tr)', 'Delta_fH', 'Delta_fG', 'log(Kf)']
         )
-        # data.columns = ['T', 'Cp', 'S', '[G-H(Tr)]/T', 'H-H(Tr)', 'Delta_fH',
-                        # 'Delta_fG', 'log(Kf)']
         self.rawdata = data
 
-        # Sometimes the JANAF files have funky stuff written in them. (Old
-        # school text format...)
+        # Sometimes the JANAF files have funky stuff written in them.
+        # (Old school text format...)
         # Clean it up.
         for c in data.columns:
             # We only need to polish up columns that aren't floating point
@@ -108,7 +104,8 @@ class JanafPhase(object):
         data['Delta_fH'] *= 1000
         data['Delta_fG'] *= 1000
 
-        # Handle NaNs for the phase transition points.  This only affects Delta_fG, Delta_fH, and log(Kf)
+        # Handle NaNs for the phase transition points. This only affects
+        # Delta_fG, Delta_fH, and log(Kf)
         good_indices = np.where(np.isfinite(data['Delta_fH']))
 
         # Now make interpolatable functions for each of these.
