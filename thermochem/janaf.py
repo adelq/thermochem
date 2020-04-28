@@ -110,7 +110,6 @@ class JanafPhase(object):
 
         # Handle NaNs for the phase transition points.  This only affects Delta_fG, Delta_fH, and log(Kf)
         good_indices = np.where(np.isfinite(data['Delta_fH']))
-        print(good_indices)
 
         # Now make interpolatable functions for each of these.
         self.cp = interp1d(self.rawdata['T'], self.rawdata['Cp'])
