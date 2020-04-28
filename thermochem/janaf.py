@@ -109,17 +109,20 @@ class JanafPhase(object):
         data['Delta_fG'] *= 1000
 
         # Handle NaNs for the phase transition points.  This only affects Delta_fG, Delta_fH, and log(Kf)
-        GoodIndices = np.where(np.isfinite(data['Delta_fH']))
-        print(GoodIndices)
+        good_indices = np.where(np.isfinite(data['Delta_fH']))
+        print(good_indices)
 
         # Now make interpolatable functions for each of these.
         self.cp = interp1d(self.rawdata['T'], self.rawdata['Cp'])
         self.S = interp1d(self.rawdata['T'], self.rawdata['S'])
         self.gef = interp1d(self.rawdata['T'], self.rawdata['[G-H(Tr)]/T'])
         self.hef = interp1d(self.rawdata['T'], self.rawdata['H-H(Tr)'])
-        self.DeltaH = interp1d(self.rawdata['T'].iloc[GoodIndices], self.rawdata['Delta_fH'].iloc[GoodIndices])
-        self.DeltaG = interp1d(self.rawdata['T'].iloc[GoodIndices], self.rawdata['Delta_fG'].iloc[GoodIndices])
-        self.logKf = interp1d(self.rawdata['T'].iloc[GoodIndices], self.rawdata['log(Kf)'].iloc[GoodIndices])
+        self.DeltaH = interp1d(self.rawdata['T'].iloc[good_indices],
+                               self.rawdata['Delta_fH'].iloc[good_indices])
+        self.DeltaG = interp1d(self.rawdata['T'].iloc[good_indices],
+                               self.rawdata['Delta_fG'].iloc[good_indices])
+        self.logKf = interp1d(self.rawdata['T'].iloc[good_indices],
+                              self.rawdata['log(Kf)'].iloc[good_indices])
 
         # TODO Deal well with crystal<->liquid transitions which have a below
         # and above value for Cp, S, etc.
