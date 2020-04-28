@@ -249,7 +249,7 @@ class Janafdb(object):
             # Select records that match the chemical/mineral name.
             namesearch = self.db['name'].str.lower().str.contains(name.lower())
         if phase is not None:
-            phasesearch = self.db['phase'] == phase.lower()
+            phasesearch = self.db['phase'] == phase
         if filename is not None:
             # Select only records that match the filename on the website (this is very unique.)
             filenamesearch = self.db['filename'].str.lower() == filename.lower()
