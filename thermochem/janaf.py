@@ -62,7 +62,7 @@ class JanafPhase(object):
     >>> p.logKf([500, 550, 1800]).astype(int).tolist() # Equilibrium constant of formation.
     [89, 80, 18]
     >>> print(p.cp(1000))                   # Heat capacity in J/mol/K
-    [74.852]
+    74.852
     >>> print(p.cp(50000))                  # Example of erroneous extrapolation.
     Traceback (most recent call last):
         ...
@@ -217,15 +217,19 @@ class Janafdb(object):
         >>> db.getphasedata(formula='O2Ti', phase='cr')
         Traceback (most recent call last):
             ...
-        ValueError: There are 2 records matching this pattern.
+        ValueError: There are 2 records matching this pattern:
+            ...
+        Please select a unique record.
         >>> db.getphasedata(formula='Oxyz')
         Traceback (most recent call last):
             ...
-        ValueError: Valid phase types are ['cr', 'l', 'cr,l', 'g', 'ref', 'cd', 'fl', 'am', 'vit', 'mon', 'pol', 'sln', 'aq', 'sat'].
+        ValueError: Did not find a phase with formula = Oxyz
+                    Please provide enough information to select a unique record.
         >>> db.getphasedata(formula='Oxyz', phase='l')
         Traceback (most recent call last):
             ...
-        ValueError: Did not find Oxyz, None, (l)
+        ValueError: Did not find a phase with formula = Oxyz, phase = l
+                    Please provide enough information to select a unique record.
         """
 
         # Check that the phase type requested is valid.
@@ -258,14 +262,24 @@ class Janafdb(object):
         # Get the record (should be one record) which specifies this phase.
         phase_record = self.db[searchmatch]
         if phase_record.empty:
-            print("Did not find a phase with forumla = %s, name = %s, phase = %s, filename = %s" % (formula, name, phase, filename))
-            raise ValueError("Please select enough information to provide a unique record.")
+            searched = []
+            if formula is not None:
+                searched.append("formula = %s" % formula)
+            if phase is not None:
+                searched.append("phase = %s" % phase)
+            if filename is not None:
+                searched.append("filename = %s" % filename)
+            search_string = ", ".join(searched)
+            raise ValueError("""Did not find a phase with %s
+            Please provide enough information to select a unique record.""" % (search_string))
         if len(phase_record) > 1:
-            # The user has entered in data that does not uniquely select one record.  Let's help him out by listing his options unless it is too many.
-            print("There are %d records matching this pattern:" % len(phase_record))
-            print(phase_record)
-            print("")
-            raise ValueError("Please select a unique record.")
+            # The user has entered in data that does not uniquely select one
+            # record. Let's help him out by listing his options unless it is
+            # too many.
+            raise ValueError("""There are %d records matching this pattern:
+            %s
+
+            Please select a unique record.""" % (len(phase_record), phase_record))
 
         # At this point we have one record.  Check if we have that file cached.
         cachedfilename = os.path.join(
