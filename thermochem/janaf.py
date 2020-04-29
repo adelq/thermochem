@@ -120,9 +120,6 @@ class JanafPhase(object):
         self.logKf = interp1d(self.rawdata['T'].iloc[good_indices],
                               self.rawdata['log(Kf)'].iloc[good_indices])
 
-        # TODO Deal well with crystal<->liquid transitions which have a below
-        # and above value for Cp, S, etc.
-
     def __str__(self):
         rep = super().__str__()
         rep += "\n  "
