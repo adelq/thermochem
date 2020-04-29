@@ -227,6 +227,17 @@ class Janafdb(object):
             ...
         ValueError: Did not find a phase with formula = Oxyz, phase = l
                     Please provide enough information to select a unique record.
+        >>> FeO = db.getphasedata(formula='FeO', phase='cr,l')
+        >>> print(FeO)
+        <thermochem.janaf.JanafPhase object at 0x...>
+          Iron Oxide (FeO)  Fe1O1(cr,l)
+            Cp(298.15) = 49.915 J/mol/K
+            S(298.15) = 60.752 J/mol/K
+            [G-H(298.15)]/298.15 = 60.752 J/mol/K
+            H-H(298.15) = 0.000 J/mol/K
+            Delta_fH(298.15) = -272044 J/mol
+            Delta_fG(298.15) = -251429 J/mol
+            log(Kf((298.15)) = 44.049
         """
 
         # Check that the phase type requested is valid.
