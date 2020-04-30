@@ -82,7 +82,8 @@ class JanafPhase(object):
             header=None,
             delimiter=r'[\t\s]+',
             engine='python',
-            names=['T', 'Cp', 'S', '[G-H(Tr)]/T', 'H-H(Tr)', 'Delta_fH', 'Delta_fG', 'log(Kf)']
+            names=['T', 'Cp', 'S', '[G-H(Tr)]/T', 'H-H(Tr)', 'Delta_fH', 'Delta_fG', 'log(Kf)'],
+            usecols=range(8) # Ignore extra columns -- those are caused by comments in the text file
         )
         self.rawdata = data
 
