@@ -121,16 +121,16 @@ class JanafPhase(object):
                               self.rawdata['log(Kf)'].iloc[good_indices])
 
     def __str__(self):
-        rep = super().__str__()
+        rep = super(JanafPhase, self).__str__()
         rep += "\n  "
         rep += self.description
-        rep += "\n    Cp(%0.2f) = %0.3f J/mol/K"%(Tr, self.cp(Tr))
-        rep += "\n    S(%0.2f) = %0.3f J/mol/K"%(Tr, self.S(Tr))
-        rep += "\n    [G-H(%0.2f)]/%0.2f = %0.3f J/mol/K"%(Tr, Tr, self.gef(Tr))
-        rep += "\n    H-H(%0.2f) = %0.3f J/mol/K"%(Tr, self.hef(Tr))
-        rep += "\n    Delta_fH(%0.2f) = %0.0f J/mol"%(Tr, self.DeltaH(Tr))
-        rep += "\n    Delta_fG(%0.2f) = %0.0f J/mol"%(Tr, self.DeltaG(Tr))
-        rep += "\n    log(Kf((%0.2f)) = %0.3f"%(Tr, self.logKf(Tr))
+        rep += "\n    Cp(%0.2f) = %0.3f J/mol/K" % (Tr, self.cp(Tr))
+        rep += "\n    S(%0.2f) = %0.3f J/mol/K" % (Tr, self.S(Tr))
+        rep += "\n    [G-H(%0.2f)]/%0.2f = %0.3f J/mol/K" % (Tr, Tr, self.gef(Tr))
+        rep += "\n    H-H(%0.2f) = %0.3f J/mol/K" % (Tr, self.hef(Tr))
+        rep += "\n    Delta_fH(%0.2f) = %0.0f J/mol" % (Tr, self.DeltaH(Tr))
+        rep += "\n    Delta_fG(%0.2f) = %0.0f J/mol" % (Tr, self.DeltaG(Tr))
+        rep += "\n    log(Kf((%0.2f)) = %0.3f" % (Tr, self.logKf(Tr))
         return rep
 
 
