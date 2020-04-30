@@ -32,6 +32,8 @@ except ImportError:
 
 # Universal gas constant R
 R = 8.314472
+# Reference temp
+Tr = 298.15 # K
 
 
 class JanafPhase(object):
@@ -41,23 +43,27 @@ class JanafPhase(object):
     It reads in the JANAF data file and produces functions which interpolate
     the thermodynamic constants.
 
+    Tr stands for reference temperature and is 298.15 K
+
     >>> db = Janafdb()
     >>> p = db.getphasedata(formula='O2Ti', name='Rutile', phase='cr')
     >>> p.cp([500, 550, 1800]).astype(int).tolist()
     [67, 68, 78]
-    >>> print(p.S([500, 550, 1800]))
+    >>> print(p.S([500, 550, 1800]))        # Entropy in J/mol/K
     [  82.201    88.4565  176.876 ]
-    >>> print(p.gef([500, 550, 1800]))
+    >>> print(p.gef([500, 550, 1800]))      # [G-H(Tr)]/T in J/mol/K
     [  57.077   59.704  115.753]
-    >>> print(p.hef([500, 550, 1800]))
+    >>> print(p.hef([500, 550, 1800]))      # H-H(Tr) in kJ/mol
     [  12.562    15.9955  110.022 ]
-    >>> print(p.DeltaH([500, 550, 1800]))
+    >>> print(p.DeltaH([500, 550, 1800]))   # Gibbs free energy in kJ/mol
     [-943670.  -943229.5 -936679. ]
-    >>> print(p.DeltaG([500, 550, 1800]))
+    >>> print(p.DeltaG([500, 550, 1800]))   # Helmholtz free enegy in kJ/mol
     [-852157.  -843046.5 -621013. ]
-    >>> p.logKf([500, 550, 1800]).astype(int).tolist()
+    >>> p.logKf([500, 550, 1800]).astype(int).tolist() # Equilibrium constant of formation.
     [89, 80, 18]
-    >>> print(p.cp(50000))
+    >>> print(p.cp(1000))                   # Heat capacity in J/mol/K
+    74.852
+    >>> print(p.cp(50000))                  # Example of erroneous extrapolation.
     Traceback (most recent call last):
         ...
     ValueError: A value in x_new is above the interpolation range.
@@ -67,20 +73,21 @@ class JanafPhase(object):
         # Store the raw data text file from NIST.
         self.rawdata_text = rawdata_text
 
+        self.description = self.rawdata_text.splitlines()[0]
+
         # Read the text file into a DataFrame.
         data = pd.read_csv(
             StringIO(self.rawdata_text),
             skiprows=2,
             header=None,
             delimiter=r'[\t\s]+',
-            engine='python'
+            engine='python',
+            names=['T', 'Cp', 'S', '[G-H(Tr)]/T', 'H-H(Tr)', 'Delta_fH', 'Delta_fG', 'log(Kf)']
         )
-        data.columns = ['T', 'Cp', 'S', '[G-H(Tr)]/T', 'H-H(Tr)', 'Delta_fH',
-                        'Delta_fG', 'log(Kf)']
         self.rawdata = data
 
-        # Sometimes the JANAF files have funky stuff written in them. (Old
-        # school text format...)
+        # Sometimes the JANAF files have funky stuff written in them.
+        # (Old school text format...)
         # Clean it up.
         for c in data.columns:
             # We only need to polish up columns that aren't floating point
@@ -97,17 +104,34 @@ class JanafPhase(object):
         data['Delta_fH'] *= 1000
         data['Delta_fG'] *= 1000
 
+        # Handle NaNs for the phase transition points. This only affects
+        # Delta_fG, Delta_fH, and log(Kf)
+        good_indices = np.where(np.isfinite(data['Delta_fH']))
+
         # Now make interpolatable functions for each of these.
         self.cp = interp1d(self.rawdata['T'], self.rawdata['Cp'])
         self.S = interp1d(self.rawdata['T'], self.rawdata['S'])
         self.gef = interp1d(self.rawdata['T'], self.rawdata['[G-H(Tr)]/T'])
         self.hef = interp1d(self.rawdata['T'], self.rawdata['H-H(Tr)'])
-        self.DeltaH = interp1d(self.rawdata['T'], self.rawdata['Delta_fH'])
-        self.DeltaG = interp1d(self.rawdata['T'], self.rawdata['Delta_fG'])
-        self.logKf = interp1d(self.rawdata['T'], self.rawdata['log(Kf)'])
+        self.DeltaH = interp1d(self.rawdata['T'].iloc[good_indices],
+                               self.rawdata['Delta_fH'].iloc[good_indices])
+        self.DeltaG = interp1d(self.rawdata['T'].iloc[good_indices],
+                               self.rawdata['Delta_fG'].iloc[good_indices])
+        self.logKf = interp1d(self.rawdata['T'].iloc[good_indices],
+                              self.rawdata['log(Kf)'].iloc[good_indices])
 
-        # TODO Deal well with crystal<->liquid transitions which have a below
-        # and above value for Cp, S, etc.
+    def __str__(self):
+        rep = super(JanafPhase, self).__str__()
+        rep += "\n  "
+        rep += self.description
+        rep += "\n    Cp(%0.2f) = %0.3f J/mol/K" % (Tr, self.cp(Tr))
+        rep += "\n    S(%0.2f) = %0.3f J/mol/K" % (Tr, self.S(Tr))
+        rep += "\n    [G-H(%0.2f)]/%0.2f = %0.3f J/mol/K" % (Tr, Tr, self.gef(Tr))
+        rep += "\n    H-H(%0.2f) = %0.3f J/mol/K" % (Tr, self.hef(Tr))
+        rep += "\n    Delta_fH(%0.2f) = %0.0f J/mol" % (Tr, self.DeltaH(Tr))
+        rep += "\n    Delta_fG(%0.2f) = %0.0f J/mol" % (Tr, self.DeltaG(Tr))
+        rep += "\n    log(Kf((%0.2f)) = %0.3f" % (Tr, self.logKf(Tr))
+        return rep
 
 
 class Janafdb(object):
@@ -115,6 +139,10 @@ class Janafdb(object):
     Class that reads the NIST JANAF tables for thermodynamic data.
 
     Data is initially read from the web servers, and then cached.
+
+    Try:
+        Rutile = Janafdb().getphasedata(name='Rutile')
+        to load thermodynamic constants for TiO2, rutile.
     """
     VALIDPHASETYPES = ['cr', 'l', 'cr,l', 'g', 'ref', 'cd', 'fl', 'am', 'vit',
                        'mon', 'pol', 'sln', 'aq', 'sat']
@@ -143,6 +171,15 @@ class Janafdb(object):
         if not os.path.exists(self.JANAF_cachedir):
             os.mkdir(self.JANAF_cachedir)
 
+    def __str__(self):
+        rep = super().__str__()
+        # rep = "\tFormula = %s"%self.db["formula"]
+        rep += "\n  Try:\n"
+        rep += "    Janafdb().search('Ti')\n"
+        rep += "  or:\n"
+        rep += "    Janafdb().getphasedata(name='Magnesium Oxide', phase='l')\n"
+        return rep
+
     def search(self, searchstr):
         """
         List all the species containing a string. Helpful for
@@ -164,7 +201,7 @@ class Janafdb(object):
 
         return self.db[formulasearch | namesearch]
 
-    def getphasedata(self, formula=None, name=None, phase=None, cache=True):
+    def getphasedata(self, formula=None, name=None, phase=None, filename=None, cache=True):
         """
         Returns an element instance given the name of the element.
         formula, name and phase match the respective fields in the JANAF index.
@@ -174,42 +211,80 @@ class Janafdb(object):
         >>> db.getphasedata(formula='O2Ti', phase='cr')
         Traceback (most recent call last):
             ...
-        ValueError: There are 2 records matching this pattern.
+        ValueError: There are 2 records matching this pattern:
+            ...
+        Please select a unique record.
         >>> db.getphasedata(formula='Oxyz')
         Traceback (most recent call last):
             ...
-        ValueError: Valid phase types are ['cr', 'l', 'cr,l', 'g', 'ref', 'cd', 'fl', 'am', 'vit', 'mon', 'pol', 'sln', 'aq', 'sat'].
+        ValueError: Did not find a phase with formula = Oxyz
+                    Please provide enough information to select a unique record.
         >>> db.getphasedata(formula='Oxyz', phase='l')
         Traceback (most recent call last):
             ...
-        ValueError: Did not find Oxyz, None, (l)
+        ValueError: Did not find a phase with formula = Oxyz, phase = l
+                    Please provide enough information to select a unique record.
+        >>> FeO = db.getphasedata(formula='FeO', phase='cr,l')
+        >>> print(FeO)
+        <thermochem.janaf.JanafPhase object at 0x...>
+          Iron Oxide (FeO)  Fe1O1(cr,l)
+            Cp(298.15) = 49.915 J/mol/K
+            S(298.15) = 60.752 J/mol/K
+            [G-H(298.15)]/298.15 = 60.752 J/mol/K
+            H-H(298.15) = 0.000 J/mol/K
+            Delta_fH(298.15) = -272044 J/mol
+            Delta_fG(298.15) = -251429 J/mol
+            log(Kf((298.15)) = 44.049
         """
 
         # Check that the phase type requested is valid.
-        if phase not in self.VALIDPHASETYPES:
+        if phase is not None:
+            phase = phase.lower()
+        if phase is not None and phase not in self.VALIDPHASETYPES:
             raise ValueError("Valid phase types are %s." % self.VALIDPHASETYPES)
 
         # We can search on either an exact formula, partial text match in the
         # name, and exact phase type.
+        # Start with all records selected in the search, and then we trim.
         formulasearch = pd.Series(np.ones(len(self.db)), dtype=bool)
         namesearch = formulasearch.copy()
         phasesearch = formulasearch.copy()
+        filenamesearch = formulasearch.copy()
         if formula is not None:
+            # Select only records that match the chemical formula.
             formulasearch = self.db['formula'] == formula
         if name is not None:
-            namesearch = self.db['name'].str.contains(name)
+            # Select records that match the chemical/mineral name.
+            namesearch = self.db['name'].str.lower().str.contains(name.lower())
         if phase is not None:
             phasesearch = self.db['phase'] == phase
-        searchmatch = formulasearch & namesearch & phasesearch
+        if filename is not None:
+            # Select only records that match the filename on the website (this is very unique.)
+            filenamesearch = self.db['filename'].str.lower() == filename.lower()
+        # Combine.
+        searchmatch = formulasearch & namesearch & phasesearch & filenamesearch
 
         # Get the record (should be one record) which specifies this phase.
         phase_record = self.db[searchmatch]
         if phase_record.empty:
-            raise ValueError("Did not find %s, %s, (%s)" %
-                             (formula, name, phase))
+            searched = []
+            if formula is not None:
+                searched.append("formula = %s" % formula)
+            if phase is not None:
+                searched.append("phase = %s" % phase)
+            if filename is not None:
+                searched.append("filename = %s" % filename)
+            search_string = ", ".join(searched)
+            raise ValueError("""Did not find a phase with %s
+            Please provide enough information to select a unique record.""" % (search_string))
         if len(phase_record) > 1:
-            raise ValueError("There are %d records matching this pattern." %
-                             len(phase_record))
+            # The user has entered in data that does not uniquely select one
+            # record. Let's help him out by listing his options unless it is
+            # too many.
+            raise ValueError("""There are %d records matching this pattern:
+            %s
+
+            Please select a unique record.""" % (len(phase_record), phase_record))
 
         # At this point we have one record.  Check if we have that file cached.
         cachedfilename = os.path.join(
