@@ -15,6 +15,7 @@ import sys
 import numpy as np
 import pandas as pd
 from scipy.interpolate import interp1d
+from textwrap import dedent
 
 try:
     # Python 3
@@ -55,9 +56,9 @@ class JanafPhase(object):
     [  57.077   59.704  115.753]
     >>> print(p.hef([500, 550, 1800]))      # H-H(Tr) in kJ/mol
     [  12.562    15.9955  110.022 ]
-    >>> print(p.DeltaH([500, 550, 1800]))   # Gibbs free energy in kJ/mol
+    >>> print(p.DeltaH([500, 550, 1800]))   # Enthalpy in kJ/mol
     [-943670.  -943229.5 -936679. ]
-    >>> print(p.DeltaG([500, 550, 1800]))   # Helmholtz free enegy in kJ/mol
+    >>> print(p.DeltaG([500, 550, 1800]))   # Gibbs free enegy in kJ/mol
     [-852157.  -843046.5 -621013. ]
     >>> p.logKf([500, 550, 1800]).astype(int).tolist() # Equilibrium constant of formation.
     [89, 80, 18]
@@ -276,16 +277,19 @@ class Janafdb(object):
             if filename is not None:
                 searched.append("filename = %s" % filename)
             search_string = ", ".join(searched)
-            raise ValueError("""Did not find a phase with %s
-            Please provide enough information to select a unique record.""" % (search_string))
+            raise ValueError(dedent("""
+            Did not find a phase with %s
+            Please provide enough information to select a unique record.
+            Also check that you didn't eliminate the record you want by choosing too many constraints where one or more constraint is incorrect.""") % (search_string))
         if len(phase_record) > 1:
             # The user has entered in data that does not uniquely select one
             # record. Let's help him out by listing his options unless it is
             # too many.
-            raise ValueError("""There are %d records matching this pattern:
+            raise ValueError(dedent("""
+            There are %d records matching this pattern:
             %s
-
-            Please select a unique record.""" % (len(phase_record), phase_record))
+            
+            Please select a unique record.""") % (len(phase_record), phase_record))
 
         # At this point we have one record.  Check if we have that file cached.
         cachedfilename = os.path.join(
