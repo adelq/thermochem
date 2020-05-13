@@ -18,6 +18,7 @@ User Guide
    :maxdepth: 2
 
    install
+   related
 
 
 API Documentation
