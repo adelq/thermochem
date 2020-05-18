@@ -142,9 +142,11 @@ class Janafdb(object):
 
     Data is initially read from the web servers, and then cached.
 
-    Try:
-        Rutile = Janafdb().getphasedata(name='Rutile')
-        to load thermodynamic constants for TiO2, rutile.
+    Examples
+    ---------
+    >>> rutile = Janafdb().getphasedata(name='Rutile')
+
+    To load thermodynamic constants for TiO2, rutile.
     """
     VALIDPHASETYPES = ['cr', 'l', 'cr,l', 'g', 'ref', 'cd', 'fl', 'am', 'vit',
                        'mon', 'pol', 'sln', 'aq', 'sat']
@@ -186,8 +188,19 @@ class Janafdb(object):
         """
         List all the species containing a string. Helpful for
         interactive use of the database.
-        returns a pandas dataframe containing valid phases.
 
+        Parameters
+        ----------
+        searchstr : str
+            The search string to look for
+
+        Returns
+        -------
+        pandas.DataFrame
+            Dataframe containing valid phases
+
+        Examples
+        --------
         >>> db = Janafdb()
         >>> s = db.search('Rb-')
         >>> print(s)
@@ -203,12 +216,35 @@ class Janafdb(object):
 
         return self.db[formulasearch | namesearch]
 
-    def getphasedata(self, formula=None, name=None, phase=None, filename=None, cache=True):
+    def getphasedata(self,
+                     formula=None,
+                     name=None,
+                     phase=None,
+                     filename=None,
+                     cache=True):
         """
         Returns an element instance given the name of the element.
         formula, name and phase match the respective fields in the JANAF index.
-        cache = False means that we will always get the data from the web.
 
+        Parameters
+        ----------
+        formula : str
+            Select records that match the chemical formula
+        name : str
+            Select records that match the chemical/mineral name
+        phase : str
+            Select records that match the chemical phase.
+            Must be one of the following valid phases:
+            cr, l, cr,l, g, ref, cd, fl, am, vit, mon, pol, sln, aq, sat
+        filename : str
+            Select only records that match the filename on the website, which
+            is very unique.
+        cache : bool, default True
+            Whether to cache the Janaf database. Setting this to false will
+            download the Janaf database every time it is used.
+
+        Examples
+        --------
         >>> db = Janafdb()
         >>> db.getphasedata(formula='O2Ti', phase='cr')
         Traceback (most recent call last):
@@ -253,15 +289,12 @@ class Janafdb(object):
         phasesearch = formulasearch.copy()
         filenamesearch = formulasearch.copy()
         if formula is not None:
-            # Select only records that match the chemical formula.
             formulasearch = self.db['formula'] == formula
         if name is not None:
-            # Select records that match the chemical/mineral name.
             namesearch = self.db['name'].str.lower().str.contains(name.lower())
         if phase is not None:
             phasesearch = self.db['phase'] == phase
         if filename is not None:
-            # Select only records that match the filename on the website (this is very unique.)
             filenamesearch = self.db['filename'].str.lower() == filename.lower()
         # Combine.
         searchmatch = formulasearch & namesearch & phasesearch & filenamesearch
