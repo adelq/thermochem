@@ -15,6 +15,7 @@ import sys
 import numpy as np
 import pandas as pd
 from scipy.interpolate import interp1d
+from textwrap import dedent
 
 try:
     # Python 3
@@ -55,9 +56,9 @@ class JanafPhase(object):
     [  57.077   59.704  115.753]
     >>> print(p.hef([500, 550, 1800]))      # H-H(Tr) in kJ/mol
     [  12.562    15.9955  110.022 ]
-    >>> print(p.DeltaH([500, 550, 1800]))   # Gibbs free energy in kJ/mol
+    >>> print(p.DeltaH([500, 550, 1800]))   # Enthalpy in kJ/mol
     [-943670.  -943229.5 -936679. ]
-    >>> print(p.DeltaG([500, 550, 1800]))   # Helmholtz free enegy in kJ/mol
+    >>> print(p.DeltaG([500, 550, 1800]))   # Gibbs free enegy in kJ/mol
     [-852157.  -843046.5 -621013. ]
     >>> p.logKf([500, 550, 1800]).astype(int).tolist() # Equilibrium constant of formation.
     [89, 80, 18]
@@ -82,7 +83,8 @@ class JanafPhase(object):
             header=None,
             delimiter=r'[\t\s]+',
             engine='python',
-            names=['T', 'Cp', 'S', '[G-H(Tr)]/T', 'H-H(Tr)', 'Delta_fH', 'Delta_fG', 'log(Kf)']
+            names=['T', 'Cp', 'S', '[G-H(Tr)]/T', 'H-H(Tr)', 'Delta_fH', 'Delta_fG', 'log(Kf)'],
+            usecols=range(8) # Ignore extra columns -- those are caused by comments in the text file
         )
         self.rawdata = data
 
@@ -140,9 +142,11 @@ class Janafdb(object):
 
     Data is initially read from the web servers, and then cached.
 
-    Try:
-        Rutile = Janafdb().getphasedata(name='Rutile')
-        to load thermodynamic constants for TiO2, rutile.
+    Examples
+    ---------
+    >>> rutile = Janafdb().getphasedata(name='Rutile')
+
+    To load thermodynamic constants for TiO2, rutile.
     """
     VALIDPHASETYPES = ['cr', 'l', 'cr,l', 'g', 'ref', 'cd', 'fl', 'am', 'vit',
                        'mon', 'pol', 'sln', 'aq', 'sat']
@@ -184,8 +188,19 @@ class Janafdb(object):
         """
         List all the species containing a string. Helpful for
         interactive use of the database.
-        returns a pandas dataframe containing valid phases.
 
+        Parameters
+        ----------
+        searchstr : str
+            The search string to look for
+
+        Returns
+        -------
+        pandas.DataFrame
+            Dataframe containing valid phases
+
+        Examples
+        --------
         >>> db = Janafdb()
         >>> s = db.search('Rb-')
         >>> print(s)
@@ -201,12 +216,35 @@ class Janafdb(object):
 
         return self.db[formulasearch | namesearch]
 
-    def getphasedata(self, formula=None, name=None, phase=None, filename=None, cache=True):
+    def getphasedata(self,
+                     formula=None,
+                     name=None,
+                     phase=None,
+                     filename=None,
+                     cache=True):
         """
         Returns an element instance given the name of the element.
         formula, name and phase match the respective fields in the JANAF index.
-        cache = False means that we will always get the data from the web.
 
+        Parameters
+        ----------
+        formula : str
+            Select records that match the chemical formula
+        name : str
+            Select records that match the chemical/mineral name
+        phase : str
+            Select records that match the chemical phase.
+            Must be one of the following valid phases:
+            cr, l, cr,l, g, ref, cd, fl, am, vit, mon, pol, sln, aq, sat
+        filename : str
+            Select only records that match the filename on the website, which
+            is very unique.
+        cache : bool, default True
+            Whether to cache the Janaf database. Setting this to false will
+            download the Janaf database every time it is used.
+
+        Examples
+        --------
         >>> db = Janafdb()
         >>> db.getphasedata(formula='O2Ti', phase='cr')
         Traceback (most recent call last):
@@ -251,15 +289,12 @@ class Janafdb(object):
         phasesearch = formulasearch.copy()
         filenamesearch = formulasearch.copy()
         if formula is not None:
-            # Select only records that match the chemical formula.
             formulasearch = self.db['formula'] == formula
         if name is not None:
-            # Select records that match the chemical/mineral name.
             namesearch = self.db['name'].str.lower().str.contains(name.lower())
         if phase is not None:
             phasesearch = self.db['phase'] == phase
         if filename is not None:
-            # Select only records that match the filename on the website (this is very unique.)
             filenamesearch = self.db['filename'].str.lower() == filename.lower()
         # Combine.
         searchmatch = formulasearch & namesearch & phasesearch & filenamesearch
@@ -275,16 +310,19 @@ class Janafdb(object):
             if filename is not None:
                 searched.append("filename = %s" % filename)
             search_string = ", ".join(searched)
-            raise ValueError("""Did not find a phase with %s
-            Please provide enough information to select a unique record.""" % (search_string))
+            raise ValueError(dedent("""
+            Did not find a phase with %s
+            Please provide enough information to select a unique record.
+            Also check that you didn't eliminate the record you want by choosing too many constraints where one or more constraint is incorrect.""") % (search_string))
         if len(phase_record) > 1:
             # The user has entered in data that does not uniquely select one
             # record. Let's help him out by listing his options unless it is
             # too many.
-            raise ValueError("""There are %d records matching this pattern:
+            raise ValueError(dedent("""
+            There are %d records matching this pattern:
             %s
-
-            Please select a unique record.""" % (len(phase_record), phase_record))
+            
+            Please select a unique record.""") % (len(phase_record), phase_record))
 
         # At this point we have one record.  Check if we have that file cached.
         cachedfilename = os.path.join(
