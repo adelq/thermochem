@@ -1,12 +1,12 @@
+import pytest
 from thermochem.janaf import Janafdb
-from nose.tools import eq_
 from numpy.testing import assert_allclose
 
 
 def test_titanium():
     db = Janafdb()
     ti = db.search('Ti')
-    eq_(len(ti), 88)
+    assert len(ti) == 88
 
 
 def test_rutile():

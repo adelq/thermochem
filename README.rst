@@ -64,8 +64,7 @@ automatically with any of the installation instructions provided.
 Development
 -----------
 
-If you want to further develop thermochem you must install nosetests for
-testing.
+If you want to further develop thermochem you must install pytest for testing.
 
 License
 -------
