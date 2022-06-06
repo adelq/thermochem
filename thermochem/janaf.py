@@ -257,11 +257,13 @@ class Janafdb(object):
             ...
         ValueError: Did not find a phase with formula = Oxyz
                     Please provide enough information to select a unique record.
+                    Also check that you didn't eliminate the record you want by choosing too many constraints where one or more constraint is incorrect.
         >>> db.getphasedata(formula='Oxyz', phase='l')
         Traceback (most recent call last):
             ...
         ValueError: Did not find a phase with formula = Oxyz, phase = l
                     Please provide enough information to select a unique record.
+                    Also check that you didn't eliminate the record you want by choosing too many constraints where one or more constraint is incorrect.
         >>> FeO = db.getphasedata(formula='FeO', phase='cr,l')
         >>> print(FeO)
         <thermochem.janaf.JanafPhase object at 0x...>
@@ -310,10 +312,10 @@ class Janafdb(object):
             if filename is not None:
                 searched.append("filename = %s" % filename)
             search_string = ", ".join(searched)
-            raise ValueError(dedent("""
+            raise ValueError("""
             Did not find a phase with %s
             Please provide enough information to select a unique record.
-            Also check that you didn't eliminate the record you want by choosing too many constraints where one or more constraint is incorrect.""") % (search_string))
+            Also check that you didn't eliminate the record you want by choosing too many constraints where one or more constraint is incorrect.""" % search_string)
         if len(phase_record) > 1:
             # The user has entered in data that does not uniquely select one
             # record. Let's help him out by listing his options unless it is
@@ -321,7 +323,7 @@ class Janafdb(object):
             raise ValueError(dedent("""
             There are %d records matching this pattern:
             %s
-            
+
             Please select a unique record.""") % (len(phase_record), phase_record))
 
         # At this point we have one record.  Check if we have that file cached.

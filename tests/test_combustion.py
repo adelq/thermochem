@@ -1,6 +1,6 @@
+import pytest
 from thermochem.combustion import SimpleCombustor, Combustor
 from thermochem.burcat import Elementdb
-from nose.tools import assert_almost_equals
 
 
 def test_simplecombustor():
@@ -23,4 +23,4 @@ def test_combustor():
                                ("C4H10 n-butane", 0.0011)])
 
     combustor = Combustor(fuels, 1, db)
-    assert_almost_equals(combustor.heat_of_comb(423.15), 49245710.116662093)
+    pytest.approx(combustor.heat_of_comb(423.15), 49245710.116662093)
