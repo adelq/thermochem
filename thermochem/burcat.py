@@ -446,7 +446,7 @@ class Elementdb(object):
                     for i, c in zip(range(7), high):
                         _Tmax[i] = float(c.text)
 
-                    elements = phase.find("elements").getchildren()
+                    elements = phase.find("elements")
                     for elem in elements:
                         elem_data = elem.attrib
                         comp.append((elem_data['name'], int(elem_data['num_of_atoms'])))
