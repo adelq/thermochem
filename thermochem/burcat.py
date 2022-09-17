@@ -60,6 +60,7 @@ class Element(object):
         # I know perfectly that the most efficient way of evaluating
         # polynomials is recursively but I want the implementation to
         # be as explicit as possible
+        # TODO: Setting array element with sequence will be deprecated in Numpy
         Ta = np.array([1, T, T ** 2, T ** 3, T ** 4], 'd')
         if T > 200 and T <= 1000:
             return np.dot(self.Tmin_[:5], Ta) * R
