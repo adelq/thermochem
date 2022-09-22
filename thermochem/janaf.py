@@ -56,10 +56,10 @@ class JanafPhase(object):
     [  57.077   59.704  115.753]
     >>> print(p.hef([500, 550, 1800]))      # H-H(Tr) in kJ/mol
     [  12.562    15.9955  110.022 ]
-    >>> print(p.DeltaH([500, 550, 1800]))   # Enthalpy in kJ/mol
-    [-943670.  -943229.5 -936679. ]
+    >>> print(p.DeltaH([500, 550, 1800]))   # Standard enthalpy of formation in kJ/mol
+    [-943.670  -943.2295 -936.679 ]
     >>> print(p.DeltaG([500, 550, 1800]))   # Gibbs free enegy in kJ/mol
-    [-852157.  -843046.5 -621013. ]
+    [-852.157  -843.0465 -621.013 ]
     >>> p.logKf([500, 550, 1800]).astype(int).tolist() # Equilibrium constant of formation.
     [89, 80, 18]
     >>> print(p.cp(1000))                   # Heat capacity in J/mol/K
@@ -77,6 +77,7 @@ class JanafPhase(object):
         self.description = self.rawdata_text.splitlines()[0]
 
         # Read the text file into a DataFrame.
+        # TODO: adjust usecols length to be within bounds, Pandas deprecation
         data = pd.read_csv(
             StringIO(self.rawdata_text),
             skiprows=2,
@@ -102,10 +103,6 @@ class JanafPhase(object):
             # Convert to floats.
             data[c] = pd.to_numeric(data[c], errors='coerce')
 
-        # Convert all units to Joules.
-        data['Delta_fH'] *= 1000
-        data['Delta_fG'] *= 1000
-
         # Handle NaNs for the phase transition points. This only affects
         # Delta_fG, Delta_fH, and log(Kf)
         good_indices = np.where(np.isfinite(data['Delta_fH']))
@@ -130,8 +127,8 @@ class JanafPhase(object):
         rep += "\n    S(%0.2f) = %0.3f J/mol/K" % (Tr, self.S(Tr))
         rep += "\n    [G-H(%0.2f)]/%0.2f = %0.3f J/mol/K" % (Tr, Tr, self.gef(Tr))
         rep += "\n    H-H(%0.2f) = %0.3f J/mol/K" % (Tr, self.hef(Tr))
-        rep += "\n    Delta_fH(%0.2f) = %0.0f J/mol" % (Tr, self.DeltaH(Tr))
-        rep += "\n    Delta_fG(%0.2f) = %0.0f J/mol" % (Tr, self.DeltaG(Tr))
+        rep += "\n    Delta_fH(%0.2f) = %0.3f kJ/mol" % (Tr, self.DeltaH(Tr))
+        rep += "\n    Delta_fG(%0.2f) = %0.3f kJ/mol" % (Tr, self.DeltaG(Tr))
         rep += "\n    log(Kf((%0.2f)) = %0.3f" % (Tr, self.logKf(Tr))
         return rep
 
@@ -272,8 +269,8 @@ class Janafdb(object):
             S(298.15) = 60.752 J/mol/K
             [G-H(298.15)]/298.15 = 60.752 J/mol/K
             H-H(298.15) = 0.000 J/mol/K
-            Delta_fH(298.15) = -272044 J/mol
-            Delta_fG(298.15) = -251429 J/mol
+            Delta_fH(298.15) = -272.044 kJ/mol
+            Delta_fG(298.15) = -251.429 kJ/mol
             log(Kf((298.15)) = 44.049
         """
 
