@@ -146,7 +146,7 @@ class Janafdb(object):
     To load thermodynamic constants for TiO2, rutile.
     """
     VALIDPHASETYPES = ['cr', 'l', 'cr,l', 'g', 'ref', 'cd', 'fl', 'am', 'vit',
-                       'mon', 'pol', 'sln', 'aq', 'sat']
+                       'mon', 'pol', 'sln', 'aq', 'sat', 'l,g']
     JANAF_URL = "https://janaf.nist.gov/tables/%s.txt"
 
     def __init__(self):
