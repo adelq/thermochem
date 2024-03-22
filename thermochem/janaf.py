@@ -77,7 +77,6 @@ class JanafPhase(object):
         self.description = self.rawdata_text.splitlines()[0]
 
         # Read the text file into a DataFrame.
-        # TODO: adjust usecols length to be within bounds, Pandas deprecation
         data = pd.read_csv(
             StringIO(self.rawdata_text),
             skiprows=2,
@@ -85,7 +84,7 @@ class JanafPhase(object):
             delimiter=r'[\t\s]+',
             engine='python',
             names=['T', 'Cp', 'S', '[G-H(Tr)]/T', 'H-H(Tr)', 'Delta_fH', 'Delta_fG', 'log(Kf)'],
-            usecols=range(8) # Ignore extra columns -- those are caused by comments in the text file
+            on_bad_lines='warn'
         )
         self.rawdata = data
 

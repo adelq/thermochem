@@ -55,7 +55,7 @@ automatically with any of the installation instructions provided.
 
 -  SciPy >= 0.6.0
 
--  pandas >= 0.17.0
+-  pandas >= 1.3.0
 
 Development
 -----------
