@@ -12,7 +12,7 @@ setup(
     license="BSD",
     packages=find_packages(),
     include_package_data=True,
-    install_requires=['scipy>=0.6.0', 'numpy>=1.2.1', 'pandas>=0.17.0'],
+    install_requires=['scipy>=1.12.0', 'numpy>=1.17.3', 'pandas>=1.3.0'],
     zip_safe=False,
     keywords='thermo chemistry physics',
     classifiers=[
